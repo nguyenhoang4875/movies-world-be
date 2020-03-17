@@ -4,7 +4,7 @@
 Clone and run project login with account:
 
 > username: teo <br>
-> password: te123 <br>
+> password: teo123 <br>
 
 After login ==> Whitelabel Error Page ==> done <br>
 (because of not yet implement login page)<br>
