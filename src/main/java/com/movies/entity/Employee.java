@@ -1,9 +1,10 @@
 package com.movies.entity;
 
 import javax.persistence.*;
+import javax.persistence.Table;
 
 @Entity
-@Table("employee")
+@Table(name = "employee")
 public class Employee {
 
     // define fields
@@ -81,3 +82,5 @@ public class Employee {
                 '}';
     }
 }
+
+
