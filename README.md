@@ -16,3 +16,12 @@ When login with wrong account ==> Bad credentials <br>
 > Option 2: Use Spring Boot Maven plugin `mvn spring-boot: run`<br>
   (if you using maven wrapper change `mvn` -> `./mvnw` )
 
+<h2> Spring boot properties</h2>
+
+> link: [spring boot properties](https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-application-properties.html#common-application-properties)
+
+<h2> Create user in mysql</h2>
+
+> create: `CREATE USER 'moviesworld'@'localhost' IDENTIFIED BY 'moviesworld';` <br>
+> permission: `GRANT ALL PRIVILEGES ON * . * TO 'moviesworld'@'localhost';`
+
