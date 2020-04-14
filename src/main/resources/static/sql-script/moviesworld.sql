@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `movies_world`.`description` (
   `artist` NVARCHAR(100) NULL,
   `director` NVARCHAR(100) NULL,
   `content` NVARCHAR(100) NULL,
-  `Nation` NVARCHAR(45) NULL,
+  `nation` NVARCHAR(45) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -151,7 +151,7 @@ DROP TABLE IF EXISTS `movies_world`.`show_time_film`;
 
 CREATE TABLE IF NOT EXISTS `movies_world`.`show_time_film` (
   `id` INT NOT NULL,
-  `time` VARCHAR(45) NULL,
+  `time` DATETIME NULL,
   `date` DATE NULL,
   `id_film` INT NULL,
   `id_room` INT NULL,
@@ -198,7 +198,7 @@ DROP TABLE IF  EXISTS `movies_world`.`reservation`;
 
 CREATE TABLE IF NOT EXISTS `movies_world`.`reservation` (
   `id_seat` INT NOT NULL,
-  `time` TIME NULL,
+  `time` DATETIME NULL,
   `status` TINYINT(1) NULL,
   `id_user` INT NULL,
   PRIMARY KEY (`id_seat`),
@@ -207,7 +207,14 @@ CREATE TABLE IF NOT EXISTS `movies_world`.`reservation` (
     FOREIGN KEY (`id_user`)
     REFERENCES `movies_world`.`users` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_reservation_seat_id`
+    FOREIGN KEY (`id_seat`)
+    REFERENCES `movies_world`.`seat` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
+
+    )
 ENGINE = InnoDB;
 
 
@@ -218,7 +225,7 @@ DROP TABLE IF  EXISTS `movies_world`.`comment`;
 
 CREATE TABLE IF NOT EXISTS `movies_world`.`comment` (
   `id` INT NOT NULL,
-  `time_create` DATETIME(6) NULL,
+  `time_create` DATETIME NULL,
   `id_user` INT NULL,
   `id_film` INT NULL,
   PRIMARY KEY (`id`),
