@@ -1,6 +1,6 @@
 package com.movies.service;
 
-import com.movies.models.Product;
+import com.movies.entity.Product;
 
 import java.util.List;
 import java.util.Optional;
