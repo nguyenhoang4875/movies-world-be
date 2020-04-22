@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS `movies_world`.`users` (
   `email` VARCHAR(45) NULL,
   `phone` VARCHAR(45) NULL,
   `address` VARCHAR(100) NULL,
+  `enabled` INT,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
@@ -46,6 +47,7 @@ DROP TABLE IF  EXISTS `movies_world`.`authorities` ;
 
 CREATE TABLE IF NOT EXISTS `movies_world`.`authorities` (
   `id` INT NOT NULL,
+  `username` VARCHAR(50) NOT NULL,
   `authority` VARCHAR(50) NOT NULL,
   `id_user` INT NULL,
   PRIMARY KEY (`id`),
