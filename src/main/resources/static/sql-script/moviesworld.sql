@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS `movies_world`.`film` (
   `name` NVARCHAR(100) NULL,
   `trailer` VARCHAR(100) NULL,
   `id_desc` INT NULL,
+  `status` NVARCHAR(50) NULL,
   PRIMARY KEY (`id`),
 --  INDEX `fk_film_description_id_idx` (`id_desc` ASC) VISIBLE,
   CONSTRAINT `fk_film_description_id`
