@@ -1,5 +1,6 @@
 package com.movies.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -38,6 +39,11 @@ public class User implements Serializable {
 
     @Column(length = 100)
     private String address;
+
+    private boolean enable;
+
+    @Column(length = 100)
+    private String avatar;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
