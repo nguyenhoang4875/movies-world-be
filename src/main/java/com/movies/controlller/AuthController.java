@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api")
@@ -67,5 +68,10 @@ public class AuthController {
         else{
             return "The link is invalid or broken!";
         }
+    }
+
+    @GetMapping("/profile")
+    public User getProfile(Principal principal) {
+        return userService.findOneByUsername(principal.getName());
     }
 }
