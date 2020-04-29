@@ -23,6 +23,9 @@ public class Film implements Serializable {
     @Column(nullable = false)
     private String trailer;
 
+    @Column(nullable = false)
+    private String poster;
+
     private boolean status;
 
     @OneToOne

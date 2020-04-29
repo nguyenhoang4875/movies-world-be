@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -24,8 +25,6 @@ public class Reservation implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "seat_id")
-    private Seat seat;
-
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "reservation")
+    private List<Seat> seats;
 }

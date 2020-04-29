@@ -24,7 +24,7 @@ public class Seat implements Serializable {
     @JoinColumn(name = "show_time_film_id")
     private ShowTimeFilm showTimeFilm;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "seat")
-    private List<Reservation> reservations;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "reservation_id")
+    private Reservation reservation;
 }
