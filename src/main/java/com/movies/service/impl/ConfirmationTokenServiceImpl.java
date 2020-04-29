@@ -15,4 +15,9 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
     public ConfirmationToken save(ConfirmationToken confirmationToken) {
         return confirmationTokenRepository.save(confirmationToken);
     }
+
+    @Override
+    public ConfirmationToken findByToken(String token) {
+        return confirmationTokenRepository.findByToken(token);
+    }
 }

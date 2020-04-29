@@ -23,6 +23,8 @@ public class ConfirmationToken {
     @JoinColumn(nullable = false, name= "user_id")
     private User user;
 
+    public ConfirmationToken(){super();}
+
     public ConfirmationToken(User user) {
         this.user = user;
         createdDate = new Date();

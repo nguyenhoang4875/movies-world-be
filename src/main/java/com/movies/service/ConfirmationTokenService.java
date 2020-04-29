@@ -4,4 +4,5 @@ import com.movies.entity.ConfirmationToken;
 
 public interface ConfirmationTokenService {
     ConfirmationToken save(ConfirmationToken confirmationToken);
+    ConfirmationToken findByToken(String token);
 }
