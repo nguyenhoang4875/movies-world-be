@@ -1,7 +1,6 @@
 package com.movies.entity;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 

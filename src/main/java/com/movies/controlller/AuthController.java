@@ -2,10 +2,13 @@ package com.movies.controlller;
 
 import com.movies.entity.ConfirmationToken;
 import com.movies.entity.User;
+import com.movies.exception.InvalidOldPasswordException;
 import com.movies.service.ConfirmationTokenService;
 import com.movies.service.RoleService;
 import com.movies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -73,5 +76,31 @@ public class AuthController {
     @GetMapping("/profile")
     public User getProfile(Principal principal) {
         return userService.findOneByUsername(principal.getName());
+    }
+
+    @PutMapping("/edit-profile")
+    public ResponseEntity<User> editProfile(Principal principal, @RequestBody User user) {
+        User currentUser = userService.findOneByUsername(principal.getName());
+        if (currentUser == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        currentUser.setFullName(user.getFullName());
+        currentUser.setAddress(user.getAddress());
+        currentUser.setEmail(user.getEmail());
+        currentUser.setPhone(user.getPhone());
+        userService.save(currentUser);
+        return new ResponseEntity<>(currentUser, HttpStatus.OK);
+    }
+
+    @PutMapping("/change-password")
+    public String changePassword(Principal principal, @RequestParam("password") String password,
+                                 @RequestParam("oldpassword") String oldPassword) {
+        User user = userService.findOneByUsername(principal.getName());
+        if (!userService.checkIfValidOldPassword(user, oldPassword)) {
+            throw new InvalidOldPasswordException("Old password is not correct");
+        }
+        userService.changeUserPassword(user, password);
+        return "Change password successfully";
     }
 }
