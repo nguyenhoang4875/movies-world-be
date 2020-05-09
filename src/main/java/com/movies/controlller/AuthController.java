@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,8 @@ public class AuthController {
     @Autowired
     private JavaMailSender javaMailSender;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
     public String registerAccount(@RequestBody User user, HttpServletRequest request) {
@@ -41,9 +44,8 @@ public class AuthController {
             message = "This user already exists!";
         }
         else{
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             user.setEnable(false);
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRole(roleService.findOneByName("Customer"));
             userService.save(user);
             ConfirmationToken confirmationToken = new ConfirmationToken(user);
@@ -103,4 +105,6 @@ public class AuthController {
         userService.changeUserPassword(user, password);
         return "Change password successfully";
     }
+
+
 }
