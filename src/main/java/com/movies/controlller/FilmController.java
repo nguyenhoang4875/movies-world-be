@@ -25,4 +25,13 @@ public class FilmController {
         }
         return new ResponseEntity<>(films, HttpStatus.OK);
     }
+
+    @GetMapping("/coming-soon")
+    public ResponseEntity<List<Film>> getComingSoonFilms() {
+        List<Film> films = filmService.getComingSoonFilms();
+        if (films.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(films, HttpStatus.OK);
+    }
 }

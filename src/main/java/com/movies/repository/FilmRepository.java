@@ -11,4 +11,7 @@ import java.util.List;
 public interface FilmRepository extends JpaRepository<Film,Integer> {
     @Query("Select distinct f from Film f join f.showTimeFilms s where DATE(s.time) = DATE(NOW())")
     List<Film> findAllShowingNow();
+
+    @Query("Select distinct f from Film f join f.filmDescription d where DATE(d.premiere) > DATE(NOW())")
+    List<Film> findComingSoonFilms();
 }

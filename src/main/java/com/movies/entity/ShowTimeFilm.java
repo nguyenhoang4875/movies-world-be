@@ -1,5 +1,6 @@
 package com.movies.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -19,6 +20,7 @@ public class ShowTimeFilm {
     private int id;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date time;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)

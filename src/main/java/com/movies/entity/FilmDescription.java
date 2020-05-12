@@ -1,5 +1,6 @@
 package com.movies.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NonNull;
@@ -19,6 +20,8 @@ public class FilmDescription implements Serializable {
     @Column(name = "time_limit",nullable = false,length = 100)
     private String timeLimit;
 
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date premiere;
 
     @Column(nullable = false,length = 100)

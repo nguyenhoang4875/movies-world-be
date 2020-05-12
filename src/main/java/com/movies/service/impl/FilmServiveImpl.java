@@ -19,4 +19,9 @@ public class FilmServiveImpl implements FilmService {
         List<Film> films = filmRepository.findAllShowingNow();
         return films;
     }
+
+    @Override
+    public List<Film> getComingSoonFilms() {
+        return filmRepository.findComingSoonFilms();
+    }
 }

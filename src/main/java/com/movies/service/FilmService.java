@@ -9,4 +9,5 @@ public interface FilmService {
 
     List<Film> getNowShowingFilms();
 
+    List<Film> getComingSoonFilms();
 }
