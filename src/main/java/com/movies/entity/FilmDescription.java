@@ -1,5 +1,6 @@
 package com.movies.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -32,6 +33,7 @@ public class FilmDescription implements Serializable {
     private String nation;
 
     @OneToOne(mappedBy = "filmDescription")
+    @JsonIgnore
     private Film film;
 
 }

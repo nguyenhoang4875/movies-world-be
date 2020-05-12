@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -35,12 +36,12 @@ public class Film implements Serializable {
     @JoinColumn(name = "user_id")
     private User postedUser;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "film")
+    @JsonIgnore
     private List<Comment> comments;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "film")
+    @JsonIgnore
     private List<Rating> ratings;
 
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -57,10 +58,11 @@ public class Film implements Serializable {
                     @UniqueConstraint(columnNames = {"film_id", "genre_id"})
             }
     )
+    @JsonIgnore
     private List<Genre> genres;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "film")
+    @JsonIgnore
     private List<ShowTimeFilm> showTimeFilms;
 
 }

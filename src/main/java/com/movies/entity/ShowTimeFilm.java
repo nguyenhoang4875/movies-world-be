@@ -7,15 +7,18 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "show_time_film")
 public class ShowTimeFilm {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date time;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
@@ -26,7 +29,6 @@ public class ShowTimeFilm {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "showTimeFilm")
     private List<Seat> seats;
 }
