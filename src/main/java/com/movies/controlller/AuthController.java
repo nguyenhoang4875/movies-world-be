@@ -1,12 +1,14 @@
 package com.movies.controlller;
 
 import com.movies.config.TokenProvider;
+import com.movies.converter.bases.Converter;
 import com.movies.entity.ConfirmationToken;
 import com.movies.entity.Role;
 import com.movies.entity.User;
 import com.movies.exception.InvalidOldPasswordException;
 import com.movies.entity.dto.AuthToken;
 import com.movies.entity.dto.Login;
+import com.movies.entity.dto.UserDto;
 import com.movies.service.ConfirmationTokenService;
 import com.movies.service.RoleService;
 import com.movies.service.UserService;
@@ -31,6 +33,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class AuthController {
     @Autowired
     private UserService userService;
@@ -51,6 +54,9 @@ public class AuthController {
 
     @Autowired
     private TokenProvider tokenProvider;
+
+    @Autowired
+    private Converter<User,UserDto> userDaoToUserDtoConverter;
 
 
     @PostMapping("/register")
@@ -110,7 +116,9 @@ public class AuthController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new AuthToken(token));
+        UserDto userDto = userDaoToUserDtoConverter.convert(userService.findOneByUsername(login.getUsername()));
+        userDto.setToken(token);
+        return ResponseEntity.ok(userDto);
     }
 
 
