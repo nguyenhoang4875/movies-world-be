@@ -37,11 +37,10 @@ public class AuthController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public String registerAccount(@RequestBody User user, HttpServletRequest request) {
+    public ResponseEntity<String> registerAccount(@RequestBody User user, HttpServletRequest request) {
         User existingUser = userService.findOneByUsername((user.getUsername()));
-        String message = "";
         if (existingUser != null){
-            message = "This user already exists!";
+            return new ResponseEntity<>("This user already exists!", HttpStatus.BAD_REQUEST);
         }
         else{
             user.setEnable(false);
@@ -57,21 +56,20 @@ public class AuthController {
             mailMessage.setText("To confirm your account, please click here : "
                     + "http://localhost:9000/api/confirm-account?token=" + confirmationToken.getToken());
             javaMailSender.send(mailMessage);
-            message ="Successful Registration!";
+            return new ResponseEntity<>("Successful Registration!",HttpStatus.OK);
         }
-        return message;
     }
     @GetMapping("/confirm-account")
-    public String confirmRegister(@RequestParam("token") String confirmationToken){
+    public ResponseEntity<String> confirmRegister(@RequestParam("token") String confirmationToken){
         ConfirmationToken token = confirmationTokenService.findByToken(confirmationToken);
         if (token != null){
             User user = userService.findOneByUsername(token.getUser().getUsername());
             user.setEnable(true);
             userService.save(user);
-            return "Account verified!";
+            return new ResponseEntity<>("Account verified!",HttpStatus.OK);
         }
-        else{
-            return "The link is invalid or broken!";
+        else {
+            return new ResponseEntity<>("The link is invalid or broken!",HttpStatus.NOT_FOUND);
         }
     }
 

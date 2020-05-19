@@ -24,4 +24,9 @@ public class FilmServiveImpl implements FilmService {
     public List<Film> getComingSoonFilms() {
         return filmRepository.findComingSoonFilms();
     }
+
+    @Override
+    public Optional<Film> getFilmById(Integer id) {
+        return filmRepository.findById(id);
+    }
 }
