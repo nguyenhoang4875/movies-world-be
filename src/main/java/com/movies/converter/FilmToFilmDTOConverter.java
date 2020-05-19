@@ -3,6 +3,7 @@ package com.movies.converter;
 import com.movies.converter.bases.Converter;
 import com.movies.dto.FilmDTO;
 import com.movies.entity.Film;
+import com.movies.entity.Rating;
 import com.movies.exception.BadRequestException;
 import org.springframework.stereotype.Component;
 
@@ -19,15 +20,23 @@ public class FilmToFilmDTOConverter extends Converter<Film, FilmDTO> {
         filmDTO.setPoster(source.getPoster());
         filmDTO.setFilmDescription(source.getFilmDescription());
 
-        if(source.getPostedUser() != null){
+        if (source.getPostedUser() != null) {
             filmDTO.setPostedUserId(source.getPostedUser().getId());
             filmDTO.setPostedUserName(source.getPostedUser().getFullName());
         }
 
-        if(source.getGenres() != null) {
+        if (source.getGenres() != null) {
             filmDTO.setGenres(source.getGenres());
         }
 
+        float point = 0;
+        if (source.getRatings().size() > 0) {
+            for (Rating rating : source.getRatings()) {
+                point += rating.getPoint();
+            }
+            point = point/source.getRatings().size();
+        }
+        filmDTO.setRatePoint(point);
         return filmDTO;
     }
 }

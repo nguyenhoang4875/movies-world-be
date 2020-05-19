@@ -23,6 +23,8 @@ public class FilmDTO {
 
     private boolean status;
 
+    private float ratePoint;
+
     private FilmDescription filmDescription;
 
     private Integer postedUserId;
