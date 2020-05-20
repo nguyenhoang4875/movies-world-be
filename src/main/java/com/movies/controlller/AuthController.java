@@ -5,15 +5,13 @@ import com.movies.converter.bases.Converter;
 import com.movies.entity.ConfirmationToken;
 import com.movies.entity.Role;
 import com.movies.entity.User;
-import com.movies.exception.InvalidOldPasswordException;
-import com.movies.entity.dto.AuthToken;
 import com.movies.entity.dto.Login;
 import com.movies.entity.dto.UserDto;
+import com.movies.exception.InvalidOldPasswordException;
 import com.movies.service.ConfirmationTokenService;
 import com.movies.service.RoleService;
 import com.movies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -56,7 +54,7 @@ public class AuthController {
     private TokenProvider tokenProvider;
 
     @Autowired
-    private Converter<User,UserDto> userDaoToUserDtoConverter;
+    private Converter<User, UserDto> userDaoToUserDtoConverter;
 
 
     @PostMapping("/register")

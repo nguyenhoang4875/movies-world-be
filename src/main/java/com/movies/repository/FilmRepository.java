@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface FilmRepository extends JpaRepository<Film,Integer> {
+public interface FilmRepository extends JpaRepository<Film, Integer> {
     @Query("Select distinct f from Film f join f.showTimeFilms s where DATE(s.time) = DATE(NOW()) and f.status = true")
     List<Film> findAllShowingNow();
 

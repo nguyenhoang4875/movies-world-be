@@ -50,9 +50,9 @@ public class MoviesSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().
                 authorizeRequests()
                 .antMatchers("/api/auth").permitAll()
-                .antMatchers(HttpMethod.OPTIONS,"/**") .fullyAuthenticated()
-                .antMatchers(HttpMethod.GET,"/api/**").permitAll()
-                .anyRequest() .permitAll();
+                .antMatchers(HttpMethod.OPTIONS, "/**").fullyAuthenticated()
+                .antMatchers(HttpMethod.GET, "/api/**").permitAll()
+                .anyRequest().permitAll();
 
         http
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
