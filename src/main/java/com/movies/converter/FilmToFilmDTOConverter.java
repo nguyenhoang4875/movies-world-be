@@ -1,9 +1,9 @@
 package com.movies.converter;
 
 import com.movies.converter.bases.Converter;
-import com.movies.dto.FilmDTO;
 import com.movies.entity.Film;
 import com.movies.entity.Rating;
+import com.movies.entity.dto.FilmDTO;
 import com.movies.exception.BadRequestException;
 import org.springframework.stereotype.Component;
 

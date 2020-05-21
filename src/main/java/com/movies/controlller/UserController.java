@@ -28,6 +28,6 @@ public class UserController {
         User user = userService.findOneByUsername(principal.getName());
         user.setAvatar(fileName);
         userService.save(user);
-        return new UploadFileResponse(fileName, file.getContentType(), file.getSize());
+        return new UploadFileResponse(fileName, file.getContentType(), file.getSize(), "SUCCESS");
     }
 }

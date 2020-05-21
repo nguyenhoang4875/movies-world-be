@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -29,18 +27,22 @@ public class User implements Serializable {
     @Column(length = 100, unique = true, nullable = false)
     @Size(min = 1, max = 50)
     @NonNull
+    @NotBlank(message = "Username is mandatory")
     private String username;
 
     @Column(nullable = false)
     @NonNull
+    @NotBlank(message = "Password is mandatory")
     private String password;
 
     @Column(length = 100, name = "full_name", nullable = false)
     @Size(min = 1, max = 50)
     @NonNull
+    @NotBlank(message = "Full Name is mandatory")
     private String fullName;
 
     @Email
+    @NotBlank(message = "Email is mandatory")
     private String email;
 
     @Column(length = 11, nullable = true)
@@ -62,20 +64,20 @@ public class User implements Serializable {
     )
     private Set<Role> roles;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     private List<Comment> comments; //list comment that user sent
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postedUser")
     @JsonIgnore
     private List<Film> postedFilms;//list film that user posted
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     private List<Rating> ratings;//list rating that user rated
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     private List<Reservation> reservations;
 
 }

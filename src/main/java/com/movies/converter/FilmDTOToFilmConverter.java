@@ -1,9 +1,9 @@
 package com.movies.converter;
 
 import com.movies.converter.bases.Converter;
-import com.movies.dto.FilmDTO;
 import com.movies.entity.Film;
 import com.movies.entity.User;
+import com.movies.entity.dto.FilmDTO;
 import com.movies.exception.BadRequestException;
 import com.movies.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

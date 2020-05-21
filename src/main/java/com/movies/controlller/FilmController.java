@@ -1,8 +1,9 @@
 package com.movies.controlller;
 
 import com.movies.converter.bases.Converter;
-import com.movies.dto.FilmDTO;
 import com.movies.entity.Film;
+import com.movies.entity.dto.FilmDTO;
+import com.movies.exception.NotFoundException;
 import com.movies.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,7 @@ public class FilmController {
     public ResponseEntity<FilmDTO> getFilm(@PathVariable Integer id) {
         Optional<Film> film = filmService.getFilmById(id);
         if (!film.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new NotFoundException("NOT FOUND");
         }
         return new ResponseEntity<>(filmFilmDTOConverter.convert(film.get()), HttpStatus.OK);
     }
