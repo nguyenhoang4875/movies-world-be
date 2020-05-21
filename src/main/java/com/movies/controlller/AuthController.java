@@ -14,6 +14,14 @@ import com.movies.exception.InvalidOldPasswordException;
 import com.movies.service.ConfirmationTokenService;
 import com.movies.service.RoleService;
 import com.movies.service.UserService;
+import io.micrometer.core.instrument.util.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +36,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -65,7 +74,7 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<MessageResponse> registerAccount(@RequestBody @Valid User user) {
+    public ResponseEntity<MessageResponse> registerAccount(@RequestBody @Valid User user) throws IOException, JSONException {
         User existingUser = userService.findOneByUsername((user.getUsername()));
         if (existingUser != null) {
             throw new BadRequestException("EXISTED USER");
@@ -83,8 +92,21 @@ public class AuthController {
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Complete Registration!");
             mailMessage.setFrom("thutranglop92@gmail.com");
+            //create short link in firebase
+            CloseableHttpClient client = HttpClients.createDefault();
+            HttpPost httpPost = new HttpPost("https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=AIzaSyAhq8rlkSp1UBN8oLjmI8IvLubtTx03gNU");
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+
+            StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \"http://localhost/register/post\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
+            httpPost.setEntity(entity);
+            HttpResponse httpResponse = client.execute(httpPost);
+            String content = IOUtils.toString(httpResponse.getEntity().getContent());
+            JSONObject jsonResult = new JSONObject(content);
+            String link = jsonResult.getString("shortLink");
+
             mailMessage.setText("To confirm your account, please click here : "
-                    + "http://localhost:9000/api/confirm-account?token=" + confirmationToken.getToken());
+                    + link +"?token=" + confirmationToken.getToken());
             javaMailSender.send(mailMessage);
             MessageResponse msg = new MessageResponse(
                     HttpStatus.OK.value(),
