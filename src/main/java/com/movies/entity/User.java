@@ -2,6 +2,9 @@ package com.movies.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -11,9 +14,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
+@RequiredArgsConstructor
+@NoArgsConstructor
 @Table(name = "users")
 public class User implements Serializable {
     @Id
@@ -22,19 +28,22 @@ public class User implements Serializable {
 
     @Column(length = 100, unique = true, nullable = false)
     @Size(min = 1, max = 50)
+    @NonNull
     private String username;
 
     @Column(nullable = false)
+    @NonNull
     private String password;
 
     @Column(length = 100, name = "full_name", nullable = false)
     @Size(min = 1, max = 50)
+    @NonNull
     private String fullName;
 
     @Email
     private String email;
 
-    @Column(length = 11,nullable = false)
+    @Column(length = 11, nullable = true)
     private String phone;
 
     @Column(length = 100)
@@ -45,9 +54,13 @@ public class User implements Serializable {
     @Column(length = 100)
     private String avatar;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")

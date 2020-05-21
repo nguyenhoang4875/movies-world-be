@@ -28,19 +28,21 @@ public class ProductManagerController {
     }
 
     @PostMapping
-    public Product addProduct(@RequestBody Product product){
+    public Product addProduct(@RequestBody Product product) {
         productService.save(product);
         return product;
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable("id") Integer id){
+    public ResponseEntity<Product> getProduct(@PathVariable("id") Integer id) {
         Optional<Product> product = productService.findById(id);
         if (!product.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(product.get(), HttpStatus.OK);
     }
-    @PutMapping (value = "/{id}")
+
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Product> updateProduct(
             @PathVariable("id") Integer id,
             @RequestBody Product product) {
@@ -57,6 +59,7 @@ public class ProductManagerController {
         productService.save(currentProduct.get());
         return new ResponseEntity<>(currentProduct.get(), HttpStatus.OK);
     }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable("id") Integer id) {
         Optional<Product> product = productService.findById(id);
