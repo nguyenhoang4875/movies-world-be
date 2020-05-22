@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.apache.commons.io.FilenameUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,7 +17,7 @@ import java.nio.file.StandardCopyOption;
 @Service
 public class FileStorageService {
 
-    private Path fileStorageLocation;
+    public Path fileStorageLocation;
 
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
@@ -42,10 +42,13 @@ public class FileStorageService {
             if (!file.getContentType().contains("image")) {
                 throw new FileStorageException("Sorry! File is not image. Please select an image! ");
             }
+            //rename file
+            fileName = FilenameUtils.getBaseName(fileName) +"-" +System.nanoTime() +"." + FilenameUtils.getExtension(fileName);
 
             // Copy file to the target location (Replacing existing file with the same name)
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
             return fileName;
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
