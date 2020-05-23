@@ -29,4 +29,14 @@ public class FilmServiveImpl implements FilmService {
     public Optional<Film> getFilmById(Integer id) {
         return filmRepository.findById(id);
     }
+
+    @Override
+    public List<Film> findAllFilmsForCustomer() {
+        return filmRepository.findAllFilmsForCustomer();
+    }
+
+    @Override
+    public List<Film> findAllFilmsByNameForCustomer(String q) {
+        return filmRepository.findAllFilmsByNameForCustomer(q);
+    }
 }

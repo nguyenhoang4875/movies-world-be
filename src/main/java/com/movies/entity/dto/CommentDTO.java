@@ -1,5 +1,6 @@
 package com.movies.entity.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.Temporal;
@@ -12,6 +13,7 @@ public class CommentDTO {
     private int id;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date timeCreate;
 
     private Boolean status;

@@ -13,4 +13,8 @@ public interface FilmService {
     List<Film> getComingSoonFilms();
 
     Optional<Film> getFilmById(Integer id);
+
+    List<Film> findAllFilmsForCustomer();
+
+    List<Film> findAllFilmsByNameForCustomer(String q);
 }
