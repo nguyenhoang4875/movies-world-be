@@ -23,4 +23,9 @@ public class CommentServiceImpl implements CommentService {
     public List<Comment> getCommentsByFilm(Integer filmId) {
         return commentRepository.getAllByFilm_IdAndStatusTrue(filmId);
     }
+
+    @Override
+    public void save(Comment comment) {
+        commentRepository.save(comment);
+    }
 }
