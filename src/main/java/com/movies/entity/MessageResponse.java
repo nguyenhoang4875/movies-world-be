@@ -3,11 +3,13 @@ package com.movies.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
-public class UploadFileResponse {
-    private String fileName;
-    private String fileType;
-    private long size;
+public class MessageResponse {
+
+    private int status;
     private String message;
+    private LocalDateTime dateTime;
 }

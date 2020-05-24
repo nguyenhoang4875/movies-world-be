@@ -3,14 +3,25 @@ package com.movies.controlller;
 import com.movies.config.TokenProvider;
 import com.movies.converter.bases.Converter;
 import com.movies.entity.ConfirmationToken;
+import com.movies.entity.MessageResponse;
 import com.movies.entity.Role;
 import com.movies.entity.User;
 import com.movies.entity.dto.Login;
+import com.movies.entity.dto.ProfileDTO;
 import com.movies.entity.dto.UserDto;
+import com.movies.exception.BadRequestException;
 import com.movies.exception.InvalidOldPasswordException;
 import com.movies.service.ConfirmationTokenService;
 import com.movies.service.RoleService;
 import com.movies.service.UserService;
+import io.micrometer.core.instrument.util.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +35,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -56,13 +69,15 @@ public class AuthController {
     @Autowired
     private Converter<User, UserDto> userDaoToUserDtoConverter;
 
+    @Autowired
+    private Converter<User, ProfileDTO> userProfileDTOConverter;
+
 
     @PostMapping("/register")
-    public String registerAccount(@RequestBody User user, HttpServletRequest request) {
+    public ResponseEntity<MessageResponse> registerAccount(@RequestBody @Valid User user) throws IOException, JSONException {
         User existingUser = userService.findOneByUsername((user.getUsername()));
-        String message = "";
         if (existingUser != null) {
-            message = "This user already exists!";
+            throw new BadRequestException("EXISTED USER");
         } else {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             user.setEnable(false);
@@ -77,32 +92,52 @@ public class AuthController {
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Complete Registration!");
             mailMessage.setFrom("thutranglop92@gmail.com");
+            //create short link in firebase
+            CloseableHttpClient client = HttpClients.createDefault();
+            HttpPost httpPost = new HttpPost("https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=AIzaSyAhq8rlkSp1UBN8oLjmI8IvLubtTx03gNU");
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+
+            StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \"http://localhost/register/post\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
+            httpPost.setEntity(entity);
+            HttpResponse httpResponse = client.execute(httpPost);
+            String content = IOUtils.toString(httpResponse.getEntity().getContent());
+            JSONObject jsonResult = new JSONObject(content);
+            String link = jsonResult.getString("shortLink");
+
             mailMessage.setText("To confirm your account, please click here : "
-                    + "http://localhost:9000/api/confirm-account?token=" + confirmationToken.getToken());
+                    + link +"?token=" + confirmationToken.getToken());
             javaMailSender.send(mailMessage);
-            message = "Successful Registration!";
+            MessageResponse msg = new MessageResponse(
+                    HttpStatus.OK.value(),
+                    "SUCCESS",
+                    LocalDateTime.now());
+            return new ResponseEntity<>(msg, HttpStatus.OK);
         }
-        return message;
     }
 
     @GetMapping("/confirm-account")
-    public String confirmRegister(@RequestParam("token") String confirmationToken) {
+    public ResponseEntity<MessageResponse> confirmRegister(@RequestParam("token") String confirmationToken) {
         ConfirmationToken token = confirmationTokenService.findByToken(confirmationToken);
         if (token != null) {
             User user = userService.findOneByUsername(token.getUser().getUsername());
             user.setEnable(true);
             userService.save(user);
-            return "Account verified!";
+            MessageResponse msg = new MessageResponse(
+                    HttpStatus.OK.value(),
+                    "SUCCESS",
+                    LocalDateTime.now());
+            return new ResponseEntity<>(msg, HttpStatus.OK);
         } else {
-            return "The link is invalid or broken!";
+            throw new BadRequestException("INVALID LINK");
         }
     }
 
     @GetMapping("/profile")
-    public User getProfile(Principal principal) {
-        return userService.findOneByUsername(principal.getName());
+    public ResponseEntity<ProfileDTO> getProfile(Principal principal) {
+        ProfileDTO profileDTO = userProfileDTOConverter.convert(userService.findOneByUsername(principal.getName()));
+        return new ResponseEntity<>(profileDTO, HttpStatus.OK);
     }
-
 
     @PostMapping("/auth")
     public ResponseEntity<?> login(@RequestBody Login login) {
@@ -119,12 +154,11 @@ public class AuthController {
         return ResponseEntity.ok(userDto);
     }
 
-
     @PutMapping("/edit-profile")
-    public ResponseEntity<User> editProfile(Principal principal, @RequestBody User user) {
+    public ResponseEntity<ProfileDTO> editProfile(Principal principal, @RequestBody @Valid User user) {
         User currentUser = userService.findOneByUsername(principal.getName());
         if (currentUser == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new BadRequestException("NOT FOUND");
         }
 
         currentUser.setFullName(user.getFullName());
@@ -132,18 +166,23 @@ public class AuthController {
         currentUser.setEmail(user.getEmail());
         currentUser.setPhone(user.getPhone());
         userService.save(currentUser);
-        return new ResponseEntity<>(currentUser, HttpStatus.OK);
+        ProfileDTO profileDTO = userProfileDTOConverter.convert(currentUser);
+        return new ResponseEntity<>(profileDTO, HttpStatus.OK);
     }
 
     @PutMapping("/change-password")
-    public String changePassword(Principal principal, @RequestParam("password") String password,
+    public ResponseEntity<MessageResponse> changePassword(Principal principal, @RequestParam("password") String password,
                                  @RequestParam("oldpassword") String oldPassword) {
         User user = userService.findOneByUsername(principal.getName());
         if (!userService.checkIfValidOldPassword(user, oldPassword)) {
-            throw new InvalidOldPasswordException("Old password is not correct");
+            throw new InvalidOldPasswordException("INCORRECT OLD PASSWORD");
         }
         userService.changeUserPassword(user, password);
-        return "Change password successfully";
+        MessageResponse msg = new MessageResponse(
+                HttpStatus.OK.value(),
+                "SUCCESS",
+                LocalDateTime.now());
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
 

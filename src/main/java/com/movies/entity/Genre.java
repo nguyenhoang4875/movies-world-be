@@ -1,5 +1,7 @@
 package com.movies.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -21,7 +23,7 @@ public class Genre implements Serializable {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToMany(cascade = {CascadeType.MERGE}, mappedBy = "genres")
+    @JsonIgnore
     private List<Film> films;
 }

@@ -1,15 +1,20 @@
 package com.movies.controlller;
 
+import com.movies.converter.bases.Converter;
 import com.movies.entity.Film;
+import com.movies.entity.dto.FilmDTO;
+import com.movies.exception.NotFoundException;
 import com.movies.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -18,21 +23,28 @@ public class FilmController {
     @Autowired
     private FilmService filmService;
 
+    @Autowired
+    private Converter<Film, FilmDTO> filmFilmDTOConverter;
+
+
     @GetMapping("/now-showing")
-    public ResponseEntity<List<Film>> getNowShowingFilms() {
+    public List<FilmDTO> getNowShowingFilms() {
         List<Film> films = filmService.getNowShowingFilms();
-        if (films.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(films, HttpStatus.OK);
+        return filmFilmDTOConverter.convert(films);
     }
 
     @GetMapping("/coming-soon")
-    public ResponseEntity<List<Film>> getComingSoonFilms() {
+    public List<FilmDTO> getComingSoonFilms() {
         List<Film> films = filmService.getComingSoonFilms();
-        if (films.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return filmFilmDTOConverter.convert(films);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FilmDTO> getFilm(@PathVariable Integer id) {
+        Optional<Film> film = filmService.getFilmById(id);
+        if (!film.isPresent()) {
+            throw new NotFoundException("NOT FOUND");
         }
-        return new ResponseEntity<>(films, HttpStatus.OK);
+        return new ResponseEntity<>(filmFilmDTOConverter.convert(film.get()), HttpStatus.OK);
     }
 }
