@@ -114,6 +114,34 @@ public class AuthController {
         }
     }
 
+    @PostMapping("admin/register")
+    public String registerAccountByAdmin(@RequestBody User user, HttpServletRequest request) {
+        User existingUser = userService.findOneByUsername((user.getUsername()));
+        String message = "";
+        if (existingUser != null) {
+            message = "This user already exists!";
+        } else {
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            user.setEnable(false);
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            Set<Role> tempRoles = new HashSet<>();
+            tempRoles.add(roleService.findOneByName("ROLE_STAFF"));
+            user.setRoles(tempRoles);
+            userService.save(user);
+            ConfirmationToken confirmationToken = new ConfirmationToken(user);
+            confirmationTokenService.save(confirmationToken);
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("Complete Registration!");
+            mailMessage.setFrom("thutranglop92@gmail.com");
+            mailMessage.setText("To confirm your account, please click here : "
+                    + "http://localhost:9000/api/confirm-account?token=" + confirmationToken.getToken());
+            javaMailSender.send(mailMessage);
+            message = "Successful Registration!";
+        }
+        return message;
+    }
+
     @GetMapping("/confirm-account")
     public ResponseEntity<MessageResponse> confirmRegister(@RequestParam("token") String confirmationToken) {
         ConfirmationToken token = confirmationTokenService.findByToken(confirmationToken);
