@@ -1,8 +1,13 @@
 package com.movies.service;
 
+import com.movies.entity.dto.UserDetailDto;
+
+import java.util.List;
 import com.movies.entity.dao.User;
 
 public interface UserService {
+
+    List<UserDetailDto> getAllUsers();
 
     void save(User user);
 
