@@ -13,7 +13,7 @@ public class UserDaoToUserDetailDtoConverter extends Converter<User, UserDetailD
         UserDetailDto userDetailDto = new UserDetailDto();
         userDetailDto.setId(source.getId());
         userDetailDto.setUsername(source.getUsername());
-        userDetailDto.setFullname(source.getFullName());
+        userDetailDto.setFullName(source.getFullName());
         userDetailDto.setEmail(source.getEmail());
         userDetailDto.setAddress(source.getAddress());
         userDetailDto.setPhone(source.getPhone());
