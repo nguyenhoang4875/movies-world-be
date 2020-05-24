@@ -1,4 +1,4 @@
-package com.movies.entity;
+package com.movies.entity.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
