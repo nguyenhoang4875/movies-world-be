@@ -52,7 +52,7 @@ public class MoviesSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/auth").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").fullyAuthenticated()
                 .antMatchers(HttpMethod.GET, "/api/**").permitAll()
-                .anyRequest().permitAll();
+                .anyRequest().fullyAuthenticated();
 
         http
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
