@@ -1,7 +1,7 @@
 package com.movies.controlller;
 
 import com.movies.converter.bases.Converter;
-import com.movies.entity.Film;
+import com.movies.entity.dao.Film;
 import com.movies.entity.dto.FilmDTO;
 import com.movies.exception.NotFoundException;
 import com.movies.service.FilmService;

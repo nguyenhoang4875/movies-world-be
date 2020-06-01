@@ -1,6 +1,6 @@
 package com.movies.entity.dto;
 
-import com.movies.entity.Role;
+import com.movies.entity.dao.Role;
 import lombok.Data;
 
 import javax.validation.constraints.Email;

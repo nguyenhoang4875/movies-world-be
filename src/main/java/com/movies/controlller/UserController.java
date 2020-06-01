@@ -1,7 +1,7 @@
 package com.movies.controlller;
 
-import com.movies.entity.UploadFileResponse;
-import com.movies.entity.User;
+import com.movies.entity.dao.UploadFileResponse;
+import com.movies.entity.dao.User;
 import com.movies.service.FileStorageService;
 import com.movies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +16,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+
     @Autowired
     private FileStorageService fileStorageService;
 

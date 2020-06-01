@@ -2,10 +2,10 @@ package com.movies.controlller;
 
 import com.movies.config.TokenProvider;
 import com.movies.converter.bases.Converter;
-import com.movies.entity.ConfirmationToken;
-import com.movies.entity.MessageResponse;
-import com.movies.entity.Role;
-import com.movies.entity.User;
+import com.movies.entity.dao.ConfirmationToken;
+import com.movies.entity.dao.MessageResponse;
+import com.movies.entity.dao.Role;
+import com.movies.entity.dao.User;
 import com.movies.entity.dto.Login;
 import com.movies.entity.dto.ProfileDTO;
 import com.movies.entity.dto.UserDto;
@@ -58,8 +58,6 @@ public class AuthController {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationManager authenticationManager;
 

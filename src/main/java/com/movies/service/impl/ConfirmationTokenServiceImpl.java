@@ -1,6 +1,6 @@
 package com.movies.service.impl;
 
-import com.movies.entity.ConfirmationToken;
+import com.movies.entity.dao.ConfirmationToken;
 import com.movies.repository.ConfirmationTokenRepository;
 import com.movies.service.ConfirmationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
