@@ -3,8 +3,6 @@ package com.movies.controlller;
 import com.movies.entity.dao.UploadFileResponse;
 import com.movies.entity.dao.User;
 import com.movies.entity.dto.UserDetailDto;
-import com.movies.entity.dao.UploadFileResponse;
-import com.movies.entity.dao.User;
 import com.movies.service.FileStorageService;
 import com.movies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +30,7 @@ public class UserController {
         User user = userService.findOneByUsername(principal.getName());
         user.setAvatar(fileName);
         userService.save(user);
-        return new UploadFileResponse(fileName, file.getContentType(), file.getSize());
+        return new UploadFileResponse(fileName, file.getContentType(), file.getSize(), "SUCCESS");
     }
 
     @GetMapping
@@ -48,6 +46,6 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable Integer userId) {
-         userService.delete(userId);
+        userService.delete(userId);
     }
 }

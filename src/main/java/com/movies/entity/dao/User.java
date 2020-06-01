@@ -1,6 +1,5 @@
 package com.movies.entity.dao;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -63,21 +62,5 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
-
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Comment> comments; //list comment that user sent
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postedUser")
-    @JsonIgnore
-    private List<Film> postedFilms;//list film that user posted
-
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Rating> ratings;//list rating that user rated
-
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Reservation> reservations;
 
 }

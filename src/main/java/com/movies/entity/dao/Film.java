@@ -5,6 +5,10 @@ import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "films")
