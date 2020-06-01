@@ -18,7 +18,7 @@ import java.util.Set;
 @Entity
 @RequiredArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
+@Table(name = "\"user\"")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +43,7 @@ public class User implements Serializable {
 
     @Email
     @NotBlank(message = "Email is mandatory")
+    @NonNull
     private String email;
 
     @Column(length = 11, nullable = true)

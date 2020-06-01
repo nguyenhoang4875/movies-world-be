@@ -39,7 +39,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
 
     private void addUserIfMissing(String username, String password, String... roles) {
         if (userRepository.findByUsername(username) == null) {
-            User user = new User(username, new BCryptPasswordEncoder().encode(password), "John Doe");
+            User user = new User(username, new BCryptPasswordEncoder().encode(password), "John Doe", "john@gmail.com");
             user.setRoles(new HashSet<>());
 
             for (String role : roles) {
