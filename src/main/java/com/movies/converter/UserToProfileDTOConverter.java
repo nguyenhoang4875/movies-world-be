@@ -1,8 +1,8 @@
 package com.movies.converter;
 
 import com.movies.converter.bases.Converter;
+import com.movies.entity.dao.User;
 import com.movies.entity.dto.ProfileDTO;
-import com.movies.entity.User;
 import com.movies.exception.BadRequestException;
 import org.springframework.stereotype.Component;
 

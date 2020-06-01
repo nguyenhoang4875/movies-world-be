@@ -1,7 +1,7 @@
 package com.movies.controlller;
 
 
-import com.movies.entity.Product;
+import com.movies.entity.dao.Product;
 import com.movies.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
