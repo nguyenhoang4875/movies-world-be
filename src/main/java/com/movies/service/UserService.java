@@ -17,6 +17,14 @@ public interface UserService {
 
     void changeUserPassword(User user, String password);
 
+    User findUserByEmail(String userEmail);
+
+    void createPasswordResetTokenForUser(User user, String token);
+
+    String validatePasswordResetToken(String token);
+
+    User getUserByPasswordResetToken(String token);
+
     UserDetailDto update(UserDetailDto userDetailDto);
 
     void delete(Integer userId);
