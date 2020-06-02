@@ -34,6 +34,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -82,9 +83,8 @@ public class AuthController {
         if (existingUser != null) {
             throw new BadRequestException("EXISTED USER");
         } else {
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             user.setEnable(false);
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             Set<Role> tempRoles = new HashSet<>();
             tempRoles.add(roleService.findOneByName("ROLE_CUSTOMER"));
             user.setRoles(tempRoles);
@@ -224,7 +224,7 @@ public class AuthController {
         httpPost.setHeader("Accept", "application/json");
         httpPost.setHeader("Content-type", "application/json");
 
-        StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \"http://localhost/resetPassword\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
+        StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \"http://localhost/reset-password\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
         httpPost.setEntity(entity);
         HttpResponse httpResponse = client.execute(httpPost);
         String content = IOUtils.toString(httpResponse.getEntity().getContent());

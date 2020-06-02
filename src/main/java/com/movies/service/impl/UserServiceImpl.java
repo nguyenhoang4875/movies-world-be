@@ -1,7 +1,6 @@
 package com.movies.service.impl;
 
 import com.movies.entity.PasswordResetToken;
-import com.movies.entity.User;
 import com.movies.repository.PasswordResetTokenRepository;
 import com.movies.converter.bases.Converter;
 import com.movies.entity.dao.User;
