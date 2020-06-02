@@ -6,6 +6,7 @@ import com.movies.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -16,5 +17,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Optional<Comment> findById(Integer id) {
         return commentRepository.findById(id);
+    }
+
+    @Override
+    public List<Comment> getCommentsByFilm(Integer filmId) {
+        return commentRepository.getAllByFilm_IdAndStatusTrue(filmId);
     }
 }
