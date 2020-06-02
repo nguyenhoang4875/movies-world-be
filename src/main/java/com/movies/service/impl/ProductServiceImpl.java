@@ -1,6 +1,6 @@
 package com.movies.service.impl;
 
-import com.movies.entity.Product;
+import com.movies.entity.dao.Product;
 import com.movies.repository.ProductRepository;
 import com.movies.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;

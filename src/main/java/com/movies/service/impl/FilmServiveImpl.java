@@ -1,6 +1,6 @@
 package com.movies.service.impl;
 
-import com.movies.entity.Film;
+import com.movies.entity.dao.Film;
 
 import com.movies.repository.FilmRepository;
 import com.movies.service.FilmService;

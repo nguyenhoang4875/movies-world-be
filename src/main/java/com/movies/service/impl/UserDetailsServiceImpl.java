@@ -1,8 +1,8 @@
 package com.movies.service.impl;
 
 
-import com.movies.entity.Role;
-import com.movies.entity.User;
+import com.movies.entity.dao.Role;
+import com.movies.entity.dao.User;
 import com.movies.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

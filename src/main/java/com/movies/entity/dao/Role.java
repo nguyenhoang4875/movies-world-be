@@ -1,4 +1,4 @@
-package com.movies.entity;
+package com.movies.entity.dao;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

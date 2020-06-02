@@ -1,6 +1,6 @@
 package com.movies.service;
 
-import com.movies.entity.Film;
+import com.movies.entity.dao.Film;
 
 import java.util.List;
 import java.util.Optional;
