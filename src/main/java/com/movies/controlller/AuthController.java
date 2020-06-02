@@ -11,6 +11,7 @@ import com.movies.entity.dto.ProfileDTO;
 import com.movies.entity.dto.UserDto;
 import com.movies.exception.BadRequestException;
 import com.movies.exception.InvalidOldPasswordException;
+import com.movies.exception.NotFoundException;
 import com.movies.service.ConfirmationTokenService;
 import com.movies.service.RoleService;
 import com.movies.service.UserService;
@@ -41,6 +42,7 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -60,6 +62,7 @@ public class AuthController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -88,6 +91,7 @@ public class AuthController {
             userService.save(user);
             ConfirmationToken confirmationToken = new ConfirmationToken(user);
             confirmationTokenService.save(confirmationToken);
+
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Complete Registration!");
@@ -185,5 +189,78 @@ public class AuthController {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
+    @PostMapping("/reset-password")
+    public ResponseEntity resetPassword(@RequestParam("email") String userEmail) throws IOException, JSONException {
+        User user = userService.findUserByEmail(userEmail);
+        if (user == null) {
+            throw new NotFoundException("USER NOT FOUND");
+        }
+        String token = UUID.randomUUID().toString();
+        userService.createPasswordResetTokenForUser(user, token);
+
+        //send email
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(userEmail);
+        mailMessage.setSubject("Complete Registration!");
+        mailMessage.setFrom("thutranglop92@gmail.com");
+        //create short link in firebase
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=AIzaSyAhq8rlkSp1UBN8oLjmI8IvLubtTx03gNU");
+        httpPost.setHeader("Accept", "application/json");
+        httpPost.setHeader("Content-type", "application/json");
+
+        StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \"http://localhost/resetPassword\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
+        httpPost.setEntity(entity);
+        HttpResponse httpResponse = client.execute(httpPost);
+        String content = IOUtils.toString(httpResponse.getEntity().getContent());
+        JSONObject jsonResult = new JSONObject(content);
+        String link = jsonResult.getString("shortLink");
+
+        mailMessage.setText("To reset your password, please click here : "
+                + link +"?token=" + token);
+        javaMailSender.send(mailMessage);
+        MessageResponse msg = new MessageResponse(
+                HttpStatus.OK.value(),
+                "SUCCESS",
+                LocalDateTime.now());
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @GetMapping("/reset-password")
+    public ResponseEntity<MessageResponse> confirmResetPassword(@RequestParam("token") String token) {
+        String result = userService.validatePasswordResetToken(token);
+        if (result == null) {
+            MessageResponse msg = new MessageResponse(
+                    HttpStatus.OK.value(),
+                    "VALID TOKEN",
+                    LocalDateTime.now());
+            return new ResponseEntity<>(msg, HttpStatus.OK);
+        } else {
+            throw new BadRequestException(result);
+        }
+    }
+
+
+    @PostMapping("save-password")
+    public ResponseEntity savePassword(@RequestParam("token") String token,
+                                       @RequestParam("newPassword") String newPassword) {
+        String result = userService.validatePasswordResetToken(token);
+        if (result != null) {
+            throw new BadRequestException(result);
+        } else {
+            User user = userService.getUserByPasswordResetToken(token);
+            if (user != null) {
+                userService.changeUserPassword(user, newPassword);
+                MessageResponse msg = new MessageResponse(
+                        HttpStatus.OK.value(),
+                        "SUCCESS",
+                        LocalDateTime.now());
+                return new ResponseEntity<>(msg, HttpStatus.OK);
+            } else {
+                throw new BadRequestException("NOT FOUND USER");
+            }
+
+        }
+    }
 
 }

@@ -10,4 +10,12 @@ public interface UserService {
     boolean checkIfValidOldPassword(User user, String oldPassword);
 
     void changeUserPassword(User user, String password);
+
+    User findUserByEmail(String userEmail);
+
+    void createPasswordResetTokenForUser(User user, String token);
+
+    String validatePasswordResetToken(String token);
+
+    User getUserByPasswordResetToken(String token);
 }

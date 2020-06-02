@@ -20,10 +20,12 @@ public class ConfirmationToken {
     private Date createdDate;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name= "user_id")
+    @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
-    public ConfirmationToken(){super();}
+    public ConfirmationToken() {
+        super();
+    }
 
     public ConfirmationToken(User user) {
         this.user = user;
