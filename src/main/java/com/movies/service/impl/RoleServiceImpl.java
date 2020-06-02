@@ -1,6 +1,6 @@
 package com.movies.service.impl;
 
-import com.movies.entity.Role;
+import com.movies.entity.dao.Role;
 import com.movies.repository.RoleRepository;
 import com.movies.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;

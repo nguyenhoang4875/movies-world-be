@@ -1,9 +1,15 @@
 package com.movies.service;
 
-import com.movies.entity.User;
+import com.movies.entity.dao.User;
+import com.movies.entity.dto.UserDetailDto;
+
+import java.util.List;
 
 public interface UserService {
-    void save(User user);
+
+    List<UserDetailDto> getAllUsers();
+
+    User save(User user);
 
     User findOneByUsername(String username);
 
@@ -18,4 +24,8 @@ public interface UserService {
     String validatePasswordResetToken(String token);
 
     User getUserByPasswordResetToken(String token);
+
+    UserDetailDto update(UserDetailDto userDetailDto);
+
+    void delete(Integer userId);
 }

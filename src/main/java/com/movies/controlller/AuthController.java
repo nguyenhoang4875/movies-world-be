@@ -2,14 +2,15 @@ package com.movies.controlller;
 
 import com.movies.config.TokenProvider;
 import com.movies.converter.bases.Converter;
-import com.movies.entity.ConfirmationToken;
-import com.movies.entity.MessageResponse;
-import com.movies.entity.Role;
-import com.movies.entity.User;
+import com.movies.entity.dao.ConfirmationToken;
+import com.movies.entity.dao.MessageResponse;
+import com.movies.entity.dao.Role;
+import com.movies.entity.dao.User;
 import com.movies.entity.dto.Login;
 import com.movies.entity.dto.ProfileDTO;
 import com.movies.entity.dto.UserDto;
 import com.movies.exception.BadRequestException;
+import com.movies.exception.ConflictException;
 import com.movies.exception.InvalidOldPasswordException;
 import com.movies.exception.NotFoundException;
 import com.movies.service.ConfirmationTokenService;
@@ -33,7 +34,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -62,7 +62,7 @@ public class AuthController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -110,13 +110,28 @@ public class AuthController {
             String link = jsonResult.getString("shortLink");
 
             mailMessage.setText("To confirm your account, please click here : "
-                    + link +"?token=" + confirmationToken.getToken());
+                    + link + "?token=" + confirmationToken.getToken());
             javaMailSender.send(mailMessage);
             MessageResponse msg = new MessageResponse(
                     HttpStatus.OK.value(),
                     "SUCCESS",
                     LocalDateTime.now());
             return new ResponseEntity<>(msg, HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("staffs/register")
+    public User registerAccountByAdmin(@RequestBody User user) {
+        User existingUser = userService.findOneByUsername((user.getUsername()));
+        if (existingUser != null) {
+            throw new ConflictException("This username already exists!");
+        } else {
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            Set<Role> tempRoles = new HashSet<>();
+            tempRoles.add(roleService.findOneByName("ROLE_STAFF"));
+            user.setRoles(tempRoles);
+            return userService.save(user);
         }
     }
 
@@ -176,7 +191,7 @@ public class AuthController {
 
     @PutMapping("/change-password")
     public ResponseEntity<MessageResponse> changePassword(Principal principal, @RequestParam("password") String password,
-                                 @RequestParam("oldpassword") String oldPassword) {
+                                                          @RequestParam("oldpassword") String oldPassword) {
         User user = userService.findOneByUsername(principal.getName());
         if (!userService.checkIfValidOldPassword(user, oldPassword)) {
             throw new InvalidOldPasswordException("INCORRECT OLD PASSWORD");

@@ -1,7 +1,7 @@
 package com.movies.entity.dto;
 
-import com.movies.entity.FilmDescription;
-import com.movies.entity.Genre;
+import com.movies.entity.dao.FilmDescription;
+import com.movies.entity.dao.Genre;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

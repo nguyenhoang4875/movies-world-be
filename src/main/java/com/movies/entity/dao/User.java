@@ -1,6 +1,5 @@
-package com.movies.entity;
+package com.movies.entity.dao;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -11,7 +10,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -63,21 +61,5 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    @JsonIgnore
-    private List<Comment> comments; //list comment that user sent
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postedUser")
-    @JsonIgnore
-    private List<Film> postedFilms;//list film that user posted
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    @JsonIgnore
-    private List<Rating> ratings;//list rating that user rated
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    @JsonIgnore
-    private List<Reservation> reservations;
 
 }
