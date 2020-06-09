@@ -1,6 +1,7 @@
 package com.movies.controlller;
 
 import com.movies.converter.bases.Converter;
+import com.movies.entity.dao.Comment;
 import com.movies.entity.dto.CommentDTO;
 import com.movies.service.CommentService;
 import com.movies.service.FilmService;
@@ -11,11 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Date;
-import com.movies.entity.dao.Comment;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
