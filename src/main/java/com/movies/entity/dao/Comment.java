@@ -1,4 +1,4 @@
-package com.movies.entity;
+package com.movies.entity.dao;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,7 +19,7 @@ public class Comment implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_create")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date timeCreate;
 
     private Boolean status;

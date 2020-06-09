@@ -1,7 +1,7 @@
 package com.movies.converter;
 
 import com.movies.converter.bases.Converter;
-import com.movies.entity.Comment;
+import com.movies.entity.dao.Comment;
 import com.movies.entity.dto.CommentDTO;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +18,7 @@ public class CommentToCommentDTOConverter extends Converter<Comment, CommentDTO>
         commentDTO.setAvatarUser(source.getUser().getAvatar());
         commentDTO.setFilmId(source.getFilm().getId());
         commentDTO.setFilmName(source.getFilm().getName());
+
         return commentDTO;
     }
 }

@@ -1,6 +1,6 @@
 package com.movies.service.impl;
 
-import com.movies.entity.Comment;
+import com.movies.entity.dao.Comment;
 import com.movies.repository.CommentRepository;
 import com.movies.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;

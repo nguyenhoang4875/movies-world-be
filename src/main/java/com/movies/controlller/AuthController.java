@@ -2,18 +2,28 @@ package com.movies.controlller;
 
 import com.movies.config.TokenProvider;
 import com.movies.converter.bases.Converter;
-import com.movies.entity.ConfirmationToken;
-import com.movies.entity.MessageResponse;
-import com.movies.entity.Role;
-import com.movies.entity.User;
+import com.movies.entity.dao.ConfirmationToken;
+import com.movies.entity.dao.MessageResponse;
+import com.movies.entity.dao.Role;
+import com.movies.entity.dao.User;
 import com.movies.entity.dto.Login;
 import com.movies.entity.dto.ProfileDTO;
 import com.movies.entity.dto.UserDto;
 import com.movies.exception.BadRequestException;
+import com.movies.exception.ConflictException;
 import com.movies.exception.InvalidOldPasswordException;
+import com.movies.exception.NotFoundException;
 import com.movies.service.ConfirmationTokenService;
 import com.movies.service.RoleService;
 import com.movies.service.UserService;
+import io.micrometer.core.instrument.util.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +38,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -51,6 +63,7 @@ public class AuthController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -65,32 +78,60 @@ public class AuthController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<MessageResponse> registerAccount(@RequestBody @Valid User user) {
+    public ResponseEntity<MessageResponse> registerAccount(@RequestBody @Valid User user) throws IOException, JSONException {
         User existingUser = userService.findOneByUsername((user.getUsername()));
         if (existingUser != null) {
             throw new BadRequestException("EXISTED USER");
         } else {
-            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
             user.setEnable(false);
-            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             Set<Role> tempRoles = new HashSet<>();
             tempRoles.add(roleService.findOneByName("ROLE_CUSTOMER"));
             user.setRoles(tempRoles);
             userService.save(user);
             ConfirmationToken confirmationToken = new ConfirmationToken(user);
             confirmationTokenService.save(confirmationToken);
+
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Complete Registration!");
             mailMessage.setFrom("thutranglop92@gmail.com");
+            //create short link in firebase
+            CloseableHttpClient client = HttpClients.createDefault();
+            HttpPost httpPost = new HttpPost("https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=AIzaSyAhq8rlkSp1UBN8oLjmI8IvLubtTx03gNU");
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("Content-type", "application/json");
+
+            StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \"http://localhost/register/post\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
+            httpPost.setEntity(entity);
+            HttpResponse httpResponse = client.execute(httpPost);
+            String content = IOUtils.toString(httpResponse.getEntity().getContent());
+            JSONObject jsonResult = new JSONObject(content);
+            String link = jsonResult.getString("shortLink");
+
             mailMessage.setText("To confirm your account, please click here : "
-                    + "http://localhost:9000/api/confirm-account?token=" + confirmationToken.getToken());
+                    + link + "?token=" + confirmationToken.getToken());
             javaMailSender.send(mailMessage);
             MessageResponse msg = new MessageResponse(
                     HttpStatus.OK.value(),
                     "SUCCESS",
                     LocalDateTime.now());
             return new ResponseEntity<>(msg, HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("staffs/register")
+    public User registerAccountByAdmin(@RequestBody User user) {
+        User existingUser = userService.findOneByUsername((user.getUsername()));
+        if (existingUser != null) {
+            throw new ConflictException("This username already exists!");
+        } else {
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            Set<Role> tempRoles = new HashSet<>();
+            tempRoles.add(roleService.findOneByName("ROLE_STAFF"));
+            user.setRoles(tempRoles);
+            return userService.save(user);
         }
     }
 
@@ -150,7 +191,7 @@ public class AuthController {
 
     @PutMapping("/change-password")
     public ResponseEntity<MessageResponse> changePassword(Principal principal, @RequestParam("password") String password,
-                                 @RequestParam("oldpassword") String oldPassword) {
+                                                          @RequestParam("oldpassword") String oldPassword) {
         User user = userService.findOneByUsername(principal.getName());
         if (!userService.checkIfValidOldPassword(user, oldPassword)) {
             throw new InvalidOldPasswordException("INCORRECT OLD PASSWORD");
@@ -163,5 +204,78 @@ public class AuthController {
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
+    @PostMapping("/reset-password")
+    public ResponseEntity resetPassword(@RequestParam("email") String userEmail) throws IOException, JSONException {
+        User user = userService.findUserByEmail(userEmail);
+        if (user == null) {
+            throw new NotFoundException("USER NOT FOUND");
+        }
+        String token = UUID.randomUUID().toString();
+        userService.createPasswordResetTokenForUser(user, token);
+
+        //send email
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(userEmail);
+        mailMessage.setSubject("Complete Registration!");
+        mailMessage.setFrom("thutranglop92@gmail.com");
+        //create short link in firebase
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=AIzaSyAhq8rlkSp1UBN8oLjmI8IvLubtTx03gNU");
+        httpPost.setHeader("Accept", "application/json");
+        httpPost.setHeader("Content-type", "application/json");
+
+        StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \"http://localhost/reset-password\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
+        httpPost.setEntity(entity);
+        HttpResponse httpResponse = client.execute(httpPost);
+        String content = IOUtils.toString(httpResponse.getEntity().getContent());
+        JSONObject jsonResult = new JSONObject(content);
+        String link = jsonResult.getString("shortLink");
+
+        mailMessage.setText("To reset your password, please click here : "
+                + link +"?token=" + token);
+        javaMailSender.send(mailMessage);
+        MessageResponse msg = new MessageResponse(
+                HttpStatus.OK.value(),
+                "SUCCESS",
+                LocalDateTime.now());
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @GetMapping("/reset-password")
+    public ResponseEntity<MessageResponse> confirmResetPassword(@RequestParam("token") String token) {
+        String result = userService.validatePasswordResetToken(token);
+        if (result == null) {
+            MessageResponse msg = new MessageResponse(
+                    HttpStatus.OK.value(),
+                    "VALID TOKEN",
+                    LocalDateTime.now());
+            return new ResponseEntity<>(msg, HttpStatus.OK);
+        } else {
+            throw new BadRequestException(result);
+        }
+    }
+
+
+    @PostMapping("save-password")
+    public ResponseEntity savePassword(@RequestParam("token") String token,
+                                       @RequestParam("newPassword") String newPassword) {
+        String result = userService.validatePasswordResetToken(token);
+        if (result != null) {
+            throw new BadRequestException(result);
+        } else {
+            User user = userService.getUserByPasswordResetToken(token);
+            if (user != null) {
+                userService.changeUserPassword(user, newPassword);
+                MessageResponse msg = new MessageResponse(
+                        HttpStatus.OK.value(),
+                        "SUCCESS",
+                        LocalDateTime.now());
+                return new ResponseEntity<>(msg, HttpStatus.OK);
+            } else {
+                throw new BadRequestException("NOT FOUND USER");
+            }
+
+        }
+    }
 
 }

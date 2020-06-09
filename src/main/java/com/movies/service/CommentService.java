@@ -1,6 +1,6 @@
 package com.movies.service;
 
-import com.movies.entity.Comment;
+import com.movies.entity.dao.Comment;
 
 import java.util.List;
 import java.util.Optional;

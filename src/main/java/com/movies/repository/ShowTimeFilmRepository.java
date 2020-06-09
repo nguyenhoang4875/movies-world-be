@@ -1,6 +1,6 @@
 package com.movies.repository;
 
-import com.movies.entity.ShowTimeFilm;
+import com.movies.entity.dao.ShowTimeFilm;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

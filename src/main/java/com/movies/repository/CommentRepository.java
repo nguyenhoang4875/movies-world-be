@@ -1,6 +1,6 @@
 package com.movies.repository;
 
-import com.movies.entity.Comment;
+import com.movies.entity.dao.Comment;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,21 +1,23 @@
 package com.movies.controlller;
 
-import com.movies.entity.UploadFileResponse;
-import com.movies.entity.User;
+import com.movies.entity.dao.UploadFileResponse;
+import com.movies.entity.dao.User;
+import com.movies.entity.dto.UserDetailDto;
 import com.movies.service.FileStorageService;
 import com.movies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
+@CrossOrigin()
+@RequestMapping("/api/users")
 public class UserController {
+
     @Autowired
     private FileStorageService fileStorageService;
 
@@ -29,5 +31,21 @@ public class UserController {
         user.setAvatar(fileName);
         userService.save(user);
         return new UploadFileResponse(fileName, file.getContentType(), file.getSize(), "SUCCESS");
+    }
+
+    @GetMapping
+    public List<UserDetailDto> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @PutMapping("/{userId}")
+    public UserDetailDto updateUser(@PathVariable Integer userId, @Valid @RequestBody UserDetailDto userDetailDto) {
+        userDetailDto.setId(userId);
+        return userService.update(userDetailDto);
+    }
+
+    @DeleteMapping("/{userId}")
+    public void deleteUser(@PathVariable Integer userId) {
+        userService.delete(userId);
     }
 }

@@ -1,8 +1,8 @@
 package com.movies.config;
 
 
-import com.movies.entity.Role;
-import com.movies.entity.User;
+import com.movies.entity.dao.Role;
+import com.movies.entity.dao.User;
 import com.movies.repository.RoleRepository;
 import com.movies.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
@@ -56,8 +56,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         addRoleIfMissing("ROLE_ADMIN", "Administrators");
         addRoleIfMissing("ROLE_STAFF", "Staffs");
 
-        addUserIfMissing("user", "fun123", "ROLE_STAFF");
-        addUserIfMissing("admin", "fun123", "ROLE_STAFF", "ROLE_ADMIN");
+        //addUserIfMissing("admin", "fun123", "ROLE_STAFF", "ROLE_ADMIN");
 
         if (signingKey == null || signingKey.length() == 0) {
             String jws = Jwts.builder()
