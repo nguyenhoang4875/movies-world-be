@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -37,14 +36,14 @@ public class CommentController {
         return commentCommentDTOConverter.convert(comments);
     }
     @PostMapping
-    public CommentDTO addComment(@RequestBody @Valid Comment comment,
-                                 @RequestParam Integer filmId , Principal principal) {
+    public CommentDTO addComment(@RequestBody @Valid CommentDTO commentDTO,
+                                 Principal principal) {
+        Comment comment = new Comment();
         comment.setStatus(true);
-        System.out.println(LocalDateTime.now());
-        System.out.println(new Date());
         comment.setTimeCreate(new Date());
         comment.setUser(userService.findOneByUsername(principal.getName()));
-        comment.setFilm(filmService.getFilmById(filmId).get());
+        comment.setFilm(filmService.getFilmById(commentDTO.getFilmId()).get());
+        comment.setContent(commentDTO.getContent());
         commentService.save(comment);
         return commentCommentDTOConverter.convert(comment);
     }

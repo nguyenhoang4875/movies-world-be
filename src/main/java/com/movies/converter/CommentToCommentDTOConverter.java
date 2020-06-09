@@ -14,7 +14,9 @@ public class CommentToCommentDTOConverter extends Converter<Comment, CommentDTO>
         commentDTO.setContent(source.getContent());
         commentDTO.setStatus(source.getStatus());
         commentDTO.setTimeCreate(source.getTimeCreate());
-        commentDTO.setUserName(source.getUser().getUsername());
+        commentDTO.setFullNameUser(source.getUser().getFullName());
+        commentDTO.setAvatarUser(source.getUser().getAvatar());
+        commentDTO.setFilmId(source.getFilm().getId());
         commentDTO.setFilmName(source.getFilm().getName());
         return commentDTO;
     }
