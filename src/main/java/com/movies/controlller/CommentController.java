@@ -45,7 +45,6 @@ public class CommentController {
         comment.setFilm(filmService.getFilmById(commentDTO.getFilmId()).get());
         comment.setContent(commentDTO.getContent());
         commentService.save(comment);
-        System.out.println("a");
         return commentCommentDTOConverter.convert(comment);
     }
 
