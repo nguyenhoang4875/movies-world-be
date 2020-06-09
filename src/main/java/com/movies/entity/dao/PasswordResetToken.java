@@ -1,6 +1,5 @@
-package com.movies.entity;
+package com.movies.entity.dao;
 
-import com.movies.entity.dao.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

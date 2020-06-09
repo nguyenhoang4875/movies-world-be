@@ -2,14 +2,20 @@ package com.movies.controlller;
 
 import com.movies.converter.bases.Converter;
 import com.movies.entity.dao.Film;
+import com.movies.entity.dao.Rating;
+import com.movies.entity.dao.User;
 import com.movies.entity.dto.FilmDTO;
 import com.movies.exception.NotFoundException;
 import com.movies.service.FilmService;
+import com.movies.service.RatingService;
+import com.movies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +25,12 @@ import java.util.Optional;
 public class FilmController {
     @Autowired
     private FilmService filmService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private RatingService ratingService;
 
     @Autowired
     private Converter<Film, FilmDTO> filmFilmDTOConverter;
@@ -54,5 +66,37 @@ public class FilmController {
             films = filmService.findAllFilmsByNameForCustomer(name);
         }
         return filmFilmDTOConverter.convert(films);
+    }
+
+    @PutMapping("/{id}/rate")
+    public ResponseEntity<Rating> rateFilm(@RequestBody @Valid Rating rating,
+                           @PathVariable("id") Integer filmId,
+                           Principal principal) {
+        User user = userService.findOneByUsername(principal.getName());
+        Film film = filmService.getFilmById(filmId).get();
+        Rating currentRating = ratingService.findByUserAndFilm(film, user);
+        if (currentRating == null) {
+            rating.setUser(user);
+            rating.setFilm(film);
+            ratingService.save(rating);
+        } else {
+            currentRating.setPoint(rating.getPoint());
+            ratingService.save(currentRating);
+        }
+
+        return new ResponseEntity<>(rating, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-rate")
+    public ResponseEntity<Rating> getRatePoint(@RequestParam Integer userId,
+                                @RequestParam Integer filmId) {
+        User user = userService.findUserById(userId);
+        Film film = filmService.getFilmById(filmId).get();
+        Rating rating = ratingService.findByUserAndFilm(film, user);
+        if (rating == null) {
+            throw new NotFoundException("NOT FOUND");
+        }
+        return new ResponseEntity<>(rating, HttpStatus.OK);
+
     }
 }

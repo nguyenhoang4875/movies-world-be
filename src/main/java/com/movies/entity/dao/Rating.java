@@ -2,11 +2,11 @@ package com.movies.entity.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
@@ -17,19 +17,18 @@ public class Rating implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "film_id")
     @JsonIgnore
     private Film film;
 
     @Min(value = 1, message = "Invalid point")
-    @Min(value = 5, message = "Invalid point")
+    @Max(value = 5, message = "Invalid point")
+    @NotNull(message = "Point is mandatory")
     private int point;
 }
