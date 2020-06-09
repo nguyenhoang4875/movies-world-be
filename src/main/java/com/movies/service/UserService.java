@@ -28,4 +28,6 @@ public interface UserService {
     UserDetailDto update(UserDetailDto userDetailDto);
 
     void delete(Integer userId);
+
+    User findUserById(Integer userId);
 }

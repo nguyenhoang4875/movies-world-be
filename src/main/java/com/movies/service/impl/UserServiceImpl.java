@@ -1,6 +1,6 @@
 package com.movies.service.impl;
 
-import com.movies.entity.PasswordResetToken;
+import com.movies.entity.dao.PasswordResetToken;
 import com.movies.repository.PasswordResetTokenRepository;
 import com.movies.converter.bases.Converter;
 import com.movies.entity.dao.User;
@@ -102,5 +102,10 @@ public class UserServiceImpl implements UserService {
     public void delete(Integer userId) {
         User user = userRepository.findById(userId).get();
         userRepository.delete(user);
+    }
+
+    @Override
+    public User findUserById(Integer userId) {
+        return userRepository.findById(userId).get();
     }
 }
