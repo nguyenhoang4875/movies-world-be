@@ -11,11 +11,13 @@ public class CommentToCommentDTOConverter extends Converter<Comment, CommentDTO>
     public CommentDTO convert(Comment source) {
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setId(source.getId());
-        commentDTO.setTimeCreate(source.getTimeCreate());
-        commentDTO.setStatus(source.getStatus());
         commentDTO.setContent(source.getContent());
+        commentDTO.setStatus(source.getStatus());
+        commentDTO.setTimeCreate(source.getTimeCreate());
+        commentDTO.setFullNameUser(source.getUser().getFullName());
+        commentDTO.setAvatarUser(source.getUser().getAvatar());
+        commentDTO.setFilmId(source.getFilm().getId());
         commentDTO.setFilmName(source.getFilm().getName());
-        commentDTO.setUserName(source.getUser().getUsername());
 
         return commentDTO;
     }

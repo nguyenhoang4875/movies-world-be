@@ -9,4 +9,6 @@ public interface CommentService {
     Optional<Comment> findById(Integer id);
 
     List<Comment> getCommentsByFilm(Integer filmId);
+
+    void save(Comment comment);
 }
