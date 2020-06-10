@@ -17,4 +17,6 @@ public interface FilmService {
     List<Film> findAllFilmsForCustomer();
 
     List<Film> findAllFilmsByNameForCustomer(String q);
+
+    List<Film> getAllFilms();
 }

@@ -35,6 +35,11 @@ public class FilmController {
     @Autowired
     private Converter<Film, FilmDTO> filmFilmDTOConverter;
 
+    @GetMapping
+    public List<FilmDTO> getAllFilms() {
+        List<Film> films = filmService.getAllFilms();
+        return filmFilmDTOConverter.convert(films);
+    }
 
     @GetMapping("/now-showing")
     public List<FilmDTO> getNowShowingFilms() {

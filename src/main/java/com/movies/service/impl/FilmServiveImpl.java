@@ -39,4 +39,9 @@ public class FilmServiveImpl implements FilmService {
     public List<Film> findAllFilmsByNameForCustomer(String q) {
         return filmRepository.findAllFilmsByNameForCustomer(q);
     }
+
+    @Override
+    public List<Film> getAllFilms() {
+        return filmRepository.findAll();
+    }
 }

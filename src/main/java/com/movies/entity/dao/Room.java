@@ -1,5 +1,7 @@
 package com.movies.entity.dao;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -21,5 +23,6 @@ public class Room implements Serializable {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
+    @JsonBackReference
     private List<ShowTimeFilm> showTimeFilms;
 }
