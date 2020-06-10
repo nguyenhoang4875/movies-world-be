@@ -33,9 +33,14 @@ public class UserController {
         return new UploadFileResponse(fileName, file.getContentType(), file.getSize(), "SUCCESS");
     }
 
-    @GetMapping
-    public List<UserDetailDto> getAllUsers() {
-        return userService.getAllUsers();
+    @GetMapping("/customers")
+    public List<UserDetailDto> getAllCustomer() {
+        return userService.getAllUsers("ROLE_CUSTOMER");
+    }
+
+    @GetMapping("/staffs")
+    public List<UserDetailDto> getAllStaffs() {
+        return userService.getAllUsers("ROLE_STAFF");
     }
 
     @PutMapping("/{userId}")

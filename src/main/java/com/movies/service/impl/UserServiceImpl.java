@@ -31,8 +31,8 @@ public class UserServiceImpl implements UserService {
     private PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Override
-    public List<UserDetailDto> getAllUsers() {
-        return userDaoToUserDetailDtoConverter.convert(userRepository.findAll());
+    public List<UserDetailDto> getAllUsers(String role) {
+        return userDaoToUserDetailDtoConverter.convert(userRepository.findByRolesName(role));
     }
 
     @Override
@@ -108,4 +108,5 @@ public class UserServiceImpl implements UserService {
     public User findUserById(Integer userId) {
         return userRepository.findById(userId).get();
     }
+
 }
