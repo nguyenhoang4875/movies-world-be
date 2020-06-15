@@ -79,8 +79,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<MessageResponse> registerAccount(@RequestBody @Valid User user) throws IOException, JSONException {
-        User existingUser = userService.findOneByUsername((user.getUsername()));
-        if (existingUser != null) {
+        User existedUser = userService.findOneByUsername((user.getUsername()));
+        User existedEmail = userService.findUserByEmail(user.getEmail());
+        if (existedEmail != null) {
+            throw new BadRequestException("EXISTED EMAIL");
+        }
+        if (existedUser != null) {
             throw new BadRequestException("EXISTED USER");
         } else {
             user.setEnable(false);

@@ -68,6 +68,7 @@ public class MoviesSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/register").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/film/*").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/show-time/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").fullyAuthenticated()
                 //.antMatchers(HttpMethod.GET, "/api/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/image/**").permitAll()
