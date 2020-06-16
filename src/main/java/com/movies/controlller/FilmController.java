@@ -21,7 +21,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/api/film")
+@RequestMapping("/api/films")
 public class FilmController {
     @Autowired
     private FilmService filmService;
@@ -75,8 +75,8 @@ public class FilmController {
 
     @PutMapping("/{id}/rate")
     public ResponseEntity<Rating> rateFilm(@RequestBody @Valid Rating rating,
-                           @PathVariable("id") Integer filmId,
-                           Principal principal) {
+                                           @PathVariable("id") Integer filmId,
+                                           Principal principal) {
         User user = userService.findOneByUsername(principal.getName());
         Film film = filmService.getFilmById(filmId).get();
         Rating currentRating = ratingService.findByUserAndFilm(film, user);
@@ -94,7 +94,7 @@ public class FilmController {
 
     @GetMapping("/get-rate")
     public ResponseEntity<Rating> getRatePoint(@RequestParam Integer userId,
-                                @RequestParam Integer filmId) {
+                                               @RequestParam Integer filmId) {
         User user = userService.findUserById(userId);
         Film film = filmService.getFilmById(filmId).get();
         Rating rating = ratingService.findByUserAndFilm(film, user);
@@ -103,5 +103,10 @@ public class FilmController {
         }
         return new ResponseEntity<>(rating, HttpStatus.OK);
 
+    }
+
+    @PostMapping
+    public FilmDTO addFilm(@RequestBody FilmDTO filmDTO) {
+        return filmFilmDTOConverter.convert(filmService.addFilm(filmDTO));
     }
 }

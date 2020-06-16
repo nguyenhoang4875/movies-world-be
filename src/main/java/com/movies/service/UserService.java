@@ -31,4 +31,6 @@ public interface UserService {
 
     User findUserById(Integer userId);
 
+    User getCurrentUser();
+
 }
