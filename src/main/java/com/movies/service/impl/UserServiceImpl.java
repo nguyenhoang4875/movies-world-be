@@ -126,4 +126,9 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public UserDetailDto getUserById(Integer userId) {
+        return userDaoToUserDetailDtoConverter.convert(userRepository.getOne(userId));
+    }
+
 }

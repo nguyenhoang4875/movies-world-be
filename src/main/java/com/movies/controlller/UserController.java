@@ -43,6 +43,11 @@ public class UserController {
         return userService.getAllUsers("ROLE_STAFF");
     }
 
+    @GetMapping("/{userId}")
+    public UserDetailDto getUserById(@PathVariable Integer userId) {
+        return userService.getUserById(userId);
+    }
+
     @PutMapping("/{userId}")
     public UserDetailDto updateUser(@PathVariable Integer userId, @Valid @RequestBody UserDetailDto userDetailDto) {
         userDetailDto.setId(userId);
