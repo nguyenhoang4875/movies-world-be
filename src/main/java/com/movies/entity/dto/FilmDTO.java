@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 
 public class FilmDTO {
-    int id;
+    private Integer id;
 
     @NotBlank(message = "Name is mandatory")
     private String name;
@@ -36,4 +36,5 @@ public class FilmDTO {
     private String postedUserName;
 
     private List<Genre> genres;
+
 }

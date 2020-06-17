@@ -16,17 +16,13 @@ public class FilmDTOToFilmConverter extends Converter<FilmDTO, Film> {
 
     @Override
     public Film convert(FilmDTO source) {
-
         Film film = new Film();
-
-        film.setId(source.getId());
         film.setName(source.getName());
         film.setTrailer(source.getTrailer());
         film.setPoster(source.getPoster());
         film.setStatus(source.isStatus());
         FilmDescription filmDescription = filmDescriptionRepository.save(source.getFilmDescription());
         film.setFilmDescription(filmDescription);
-
         return film;
     }
 }

@@ -17,7 +17,7 @@ public class ShowTimeFilm {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern="E yyyy-MM-dd HH:mm:ss")
