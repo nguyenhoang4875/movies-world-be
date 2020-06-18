@@ -18,7 +18,7 @@ public class CommentDTO {
     private int id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
     private Date timeCreate;
 
     private Boolean status;

@@ -1,7 +1,6 @@
 package com.movies.entity.dao;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,7 +19,7 @@ public class FilmDescription implements Serializable {
     private String timeLimit;
 
     @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date premiere;
 
     @Column(nullable = false,length = 100)
