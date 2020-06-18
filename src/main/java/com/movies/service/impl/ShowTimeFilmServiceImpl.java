@@ -2,12 +2,15 @@ package com.movies.service.impl;
 
 import com.movies.converter.bases.Converter;
 import com.movies.entity.dao.Film;
+import com.movies.entity.dao.Room;
+import com.movies.entity.dao.Seat;
 import com.movies.entity.dao.ShowTimeFilm;
 import com.movies.entity.dto.FilmDTO;
 import com.movies.entity.dto.FilmTimeDTO;
 import com.movies.entity.dto.ShowTimeFilmDto;
 import com.movies.repository.FilmRepository;
 import com.movies.repository.RoomRepository;
+import com.movies.repository.SeatRepository;
 import com.movies.repository.ShowTimeFilmRepository;
 import com.movies.service.ShowTimeFilmService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +37,9 @@ public class ShowTimeFilmServiceImpl implements ShowTimeFilmService {
     @Autowired
     private Converter<Film, FilmDTO> filmFilmDTOConverter;
 
+    @Autowired
+    private SeatRepository seatRepository;
+
     @Override
     public List<ShowTimeFilm> getShowTimeFilmByFilmId(Integer filmId) {
         return showTimeFilmRepository.findAllByFilmId(filmId);
@@ -49,6 +56,15 @@ public class ShowTimeFilmServiceImpl implements ShowTimeFilmService {
         film.getShowTimeFilms().add(showTimeFilm);
         showTimeFilmDto.setFilmId(filmId);
         showTimeFilmDto.setId(showTimeFilm.getId());
+        List<String> roomNames = getListSeats(showTimeFilmDto.getRoom().getId());
+
+        for (String roomName : roomNames) {
+            Seat seat = new Seat();
+            seat.setShowTimeFilm(showTimeFilm);
+            seat.setName(roomName);
+            seatRepository.save(seat);
+        }
+
         return showTimeFilmDto;
     }
 
@@ -86,5 +102,12 @@ public class ShowTimeFilmServiceImpl implements ShowTimeFilmService {
 
         return filmTimeDTOS;
     }
+    public List<String> getListSeats(Integer roomId) {
+        Room room = roomRepository.findById(roomId).get();
+        List<String> roomNames = Arrays.asList(room.getListSeats().split(" "));
+        roomNames.forEach(System.out::println);
+        return roomNames;
+    }
+
 
 }

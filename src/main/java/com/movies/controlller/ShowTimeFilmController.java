@@ -33,7 +33,7 @@ public class ShowTimeFilmController {
     @GetMapping
     public List<String> getDate(@RequestParam("filmId") Integer filmId) {
         List<Date> dateList = showTimeFilmService.getDateShow(filmId);
-        SimpleDateFormat formatter = new SimpleDateFormat("E, MM/dd/yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("E, dd-MM-yyyy");
         List<String> stringList = new ArrayList<>();
         for (Date date : dateList) {
             stringList.add(formatter.format(date));
