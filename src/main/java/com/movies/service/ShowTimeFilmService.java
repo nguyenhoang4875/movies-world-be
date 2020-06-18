@@ -22,4 +22,10 @@ public interface ShowTimeFilmService {
     List<FilmTimeDTO> getShowTimeInDay(LocalDate d);
 
     ShowTimeFilm getOneByFilmAndTime(int filmId, LocalDateTime dateTime);
+
+    void addShowTimeFilmList(Integer filmId, List<ShowTimeFilmDto> showTimeFilmList);
+
+    ShowTimeFilmDto updateShowTimeFilm(Integer showTimeFilmId, ShowTimeFilmDto showTimeFilmDto);
+
+    void deleteShowTimeFilm(Integer showTimeFilmId);
 }

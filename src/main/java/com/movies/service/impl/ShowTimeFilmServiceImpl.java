@@ -4,6 +4,7 @@ import com.movies.converter.bases.Converter;
 import com.movies.entity.dao.Film;
 import com.movies.entity.dao.Room;
 import com.movies.entity.dao.Seat;
+import com.movies.entity.dao.Room;
 import com.movies.entity.dao.ShowTimeFilm;
 import com.movies.entity.dto.FilmDTO;
 import com.movies.entity.dto.FilmTimeDTO;
@@ -104,6 +105,31 @@ public class ShowTimeFilmServiceImpl implements ShowTimeFilmService {
         List<String> roomNames = Arrays.asList(room.getListSeats().split(" "));
         roomNames.forEach(System.out::println);
         return roomNames;
+    }
+
+    @Override
+    public void addShowTimeFilmList(Integer filmId, List<ShowTimeFilmDto> showTimeFilmDtoList) {
+        for (ShowTimeFilmDto showTimeFilmDto : showTimeFilmDtoList) {
+            addShowTimeFilm(filmId, showTimeFilmDto);
+        }
+    }
+
+    @Override
+    public ShowTimeFilmDto updateShowTimeFilm(Integer showTimeFilmId, ShowTimeFilmDto showTimeFilmDto) {
+        ShowTimeFilm showTimeFilm = showTimeFilmRepository.getOne(showTimeFilmId);
+        Room room = roomRepository.getOne(showTimeFilmDto.getRoom().getId());
+        showTimeFilm.setRoom(room);
+        showTimeFilm.setTime(showTimeFilmDto.getTime());
+        showTimeFilmRepository.save(showTimeFilm);
+        showTimeFilmDto.setFilmId(showTimeFilmId);
+        return showTimeFilmDto;
+    }
+
+    @Override
+    public void deleteShowTimeFilm(Integer showTimeFilmId) {
+        System.out.println("show time film id: "+ showTimeFilmId);
+        showTimeFilmRepository.delete(showTimeFilmRepository.getOne(showTimeFilmId));
+
     }
 
 
