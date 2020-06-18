@@ -1,9 +1,12 @@
 package com.movies.service.impl;
 
+import com.movies.converter.bases.Converter;
 import com.movies.entity.dao.Film;
 import com.movies.entity.dao.Room;
 import com.movies.entity.dao.Seat;
 import com.movies.entity.dao.ShowTimeFilm;
+import com.movies.entity.dto.FilmDTO;
+import com.movies.entity.dto.FilmTimeDTO;
 import com.movies.entity.dto.ShowTimeFilmDto;
 import com.movies.repository.FilmRepository;
 import com.movies.repository.RoomRepository;
@@ -13,6 +16,10 @@ import com.movies.service.ShowTimeFilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Service
