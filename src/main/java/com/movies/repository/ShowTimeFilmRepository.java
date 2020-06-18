@@ -16,6 +16,8 @@ public interface ShowTimeFilmRepository extends JpaRepository<ShowTimeFilm, Inte
     @Query("Select s from ShowTimeFilm s where DATE(s.time) = DATE(NOW())")
     List<ShowTimeFilm> findAllByTime();
 
+    List<ShowTimeFilm> findAllByFilmId(Integer filmId);
+
     @Query("Select DATE(s.time) from ShowTimeFilm s where s.film.id = :filmId")
     List<Date> findDate(@Param("filmId") Integer filmId);
 

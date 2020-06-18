@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserService {
 
-    List<UserDetailDto> getAllUsers();
+    List<UserDetailDto> getAllUsers(String role);
 
     User save(User user);
 
@@ -30,4 +30,8 @@ public interface UserService {
     void delete(Integer userId);
 
     User findUserById(Integer userId);
+
+    User getCurrentUser();
+
+    UserDetailDto getUserById(Integer userId);
 }

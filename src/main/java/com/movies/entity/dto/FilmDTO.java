@@ -2,14 +2,19 @@ package com.movies.entity.dto;
 
 import com.movies.entity.dao.FilmDescription;
 import com.movies.entity.dao.Genre;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class FilmDTO {
-    int id;
+    private Integer id;
 
     @NotBlank(message = "Name is mandatory")
     private String name;
@@ -31,4 +36,5 @@ public class FilmDTO {
     private String postedUserName;
 
     private List<Genre> genres;
+
 }

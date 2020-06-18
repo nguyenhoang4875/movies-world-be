@@ -34,8 +34,4 @@ public class FilmDescription implements Serializable {
 
     private String nation;
 
-    @OneToOne(mappedBy = "filmDescription")
-    @JsonIgnore
-    private Film film;
-
 }
