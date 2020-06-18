@@ -25,4 +25,7 @@ public class Room implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
     @JsonBackReference
     private List<ShowTimeFilm> showTimeFilms;
+
+    @Column(name = "list_seats")
+    private String listSeats;
 }
