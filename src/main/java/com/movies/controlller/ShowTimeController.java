@@ -1,5 +1,6 @@
 package com.movies.controlller;
 
+import com.movies.entity.dto.FilmTimeDTO;
 import com.movies.service.ShowTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,15 @@ public class ShowTimeController {
             stringList.add(format.format(time));
         }
         return stringList;
+    }
+
+    @GetMapping("/filmInDate")
+    public List<FilmTimeDTO> getShowTimeInDay(@RequestParam("date") String date) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Date d = format.parse(date);
+        List<FilmTimeDTO> filmTimeDTOS = showTimeService.getShowTimeInDay(d);
+
+        return filmTimeDTOS;
     }
 }
 
