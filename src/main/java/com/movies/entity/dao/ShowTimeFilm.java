@@ -20,7 +20,7 @@ public class ShowTimeFilm {
     private Integer id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern="E yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="E dd-MM-yyyy HH:mm:ss")
     private Date time;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
