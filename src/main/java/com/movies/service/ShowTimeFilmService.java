@@ -17,7 +17,7 @@ public interface ShowTimeFilmService {
 
     List<Date> getTimeShow(Integer filmId, Date date);
 
-    List<ShowTimeFilm> getAll();
-
     List<FilmTimeDTO> getShowTimeInDay(Date d);
+
+    ShowTimeFilm getOneByFilmAndTime(Integer filmId, Date dateTime);
 }

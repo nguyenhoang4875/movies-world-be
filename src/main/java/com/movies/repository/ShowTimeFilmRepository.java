@@ -13,16 +13,13 @@ import java.util.List;
 
 @Repository
 public interface ShowTimeFilmRepository extends JpaRepository<ShowTimeFilm, Integer> {
-    @Query("Select s from ShowTimeFilm s where DATE(s.time) = DATE(NOW())")
-    List<ShowTimeFilm> findAllByTime();
+    @Query("Select s from ShowTimeFilm s where s.time = :d and s.film.id = :filmId")
+    ShowTimeFilm findOneByFilmAndTime(@Param("filmId") Integer filmId, @Param("d") Date dateTime);
 
     List<ShowTimeFilm> findAllByFilmId(Integer filmId);
 
-    @Query("Select DATE(s.time) from ShowTimeFilm s where s.film.id = :filmId")
+    @Query("Select DATE(s.time) from ShowTimeFilm s where s.film.id = :filmId and s.time >= NOW() ")
     List<Date> findDate(@Param("filmId") Integer filmId);
-
-    @Query("Select s.time from ShowTimeFilm s where s.film.id = :filmId and DATE(s.time) = DATE(:d)")
-    List<Date> findTime(@Param("filmId") Integer filmId, @Param("d") Date date);
 
     @Query("Select distinct s.film from ShowTimeFilm s where DATE(s.time) = DATE(:d) and s.time >= NOW() ")
     List<Film> findFilmByDate(@Param("d") Date date);

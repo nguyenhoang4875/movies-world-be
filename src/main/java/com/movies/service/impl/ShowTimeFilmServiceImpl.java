@@ -75,12 +75,7 @@ public class ShowTimeFilmServiceImpl implements ShowTimeFilmService {
 
     @Override
     public List<Date> getTimeShow(Integer filmId, Date date) {
-        return showTimeFilmRepository.findTime(filmId, date);
-    }
-
-    @Override
-    public List<ShowTimeFilm> getAll() {
-        return showTimeFilmRepository.findAllByTime();
+        return showTimeFilmRepository.findTimeFromNow(filmId, date);
     }
 
     @Override
@@ -102,6 +97,12 @@ public class ShowTimeFilmServiceImpl implements ShowTimeFilmService {
 
         return filmTimeDTOS;
     }
+
+    @Override
+    public ShowTimeFilm getOneByFilmAndTime(Integer filmId, Date dateTime) {
+        return showTimeFilmRepository.findOneByFilmAndTime(filmId, dateTime);
+    }
+
     public List<String> getListSeats(Integer roomId) {
         Room room = roomRepository.findById(roomId).get();
         List<String> roomNames = Arrays.asList(room.getListSeats().split(" "));

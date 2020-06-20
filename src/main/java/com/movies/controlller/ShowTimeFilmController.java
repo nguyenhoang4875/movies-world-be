@@ -60,7 +60,6 @@ public class ShowTimeFilmController {
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         Date d = format.parse(date);
         List<FilmTimeDTO> filmTimeDTOS = showTimeFilmService.getShowTimeInDay(d);
-
         return filmTimeDTOS;
     }
 }

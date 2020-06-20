@@ -1,5 +1,6 @@
 package com.movies.entity.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ public class Seat implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "show_time_film_id")
+    @JsonIgnore
     private ShowTimeFilm showTimeFilm;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
