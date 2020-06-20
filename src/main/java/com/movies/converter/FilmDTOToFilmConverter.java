@@ -21,6 +21,7 @@ public class FilmDTOToFilmConverter extends Converter<FilmDTO, Film> {
         film.setTrailer(source.getTrailer());
         film.setPoster(source.getPoster());
         film.setStatus(source.isStatus());
+        film.setGenres(source.getGenres());
         FilmDescription filmDescription = filmDescriptionRepository.save(source.getFilmDescription());
         film.setFilmDescription(filmDescription);
         return film;

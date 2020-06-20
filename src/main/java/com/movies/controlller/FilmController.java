@@ -6,6 +6,7 @@ import com.movies.entity.dao.Rating;
 import com.movies.entity.dao.User;
 import com.movies.entity.dto.FilmDTO;
 import com.movies.exception.NotFoundException;
+import com.movies.service.FileStorageService;
 import com.movies.service.FilmService;
 import com.movies.service.RatingService;
 import com.movies.service.UserService;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -34,6 +36,9 @@ public class FilmController {
 
     @Autowired
     private Converter<Film, FilmDTO> filmFilmDTOConverter;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @GetMapping
     public List<FilmDTO> getAllFilms() {
