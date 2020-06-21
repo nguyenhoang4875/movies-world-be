@@ -117,10 +117,6 @@ public class FilmController {
 
     @PutMapping("/{filmId}")
     public FilmDTO updateFilm(@PathVariable Integer filmId, @RequestBody FilmDTO filmDTO) {
-        System.out.println("---------------------------");
-        System.out.println(filmDTO);
-        System.out.println("---------------------------");
-
         filmDTO.setId(filmId);
         return filmFilmDTOConverter.convert(filmService.updateFilm(filmId, filmDTO));
     }
