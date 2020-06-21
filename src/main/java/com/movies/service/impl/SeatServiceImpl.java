@@ -18,4 +18,14 @@ public class SeatServiceImpl implements SeatService {
     public List<Seat> getAllByShowTimeFilm(ShowTimeFilm showTimeFilm) {
         return seatRepository.findAllByShowTimeFilm(showTimeFilm);
     }
+
+    @Override
+    public Seat getOneByNameAndShowTimeFilm(String nameSeat, ShowTimeFilm showTimeFilm) {
+        return seatRepository.findSeatByNameAndShowTimeFilm(nameSeat, showTimeFilm);
+    }
+
+    @Override
+    public Seat save(Seat seat) {
+        return seatRepository.save(seat);
+    }
 }

@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface SeatService {
     List<Seat> getAllByShowTimeFilm(ShowTimeFilm showTimeFilm);
+
+    Seat getOneByNameAndShowTimeFilm(String nameSeat, ShowTimeFilm showTimeFilm);
+
+    Seat save(Seat seat);
 }

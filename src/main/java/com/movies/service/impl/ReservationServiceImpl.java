@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -17,5 +18,15 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Reservation> findReservationByUser(User user) {
         return reservationRepository.findAllByUser(user);
+    }
+
+    @Override
+    public Reservation save(Reservation reservation) {
+        return reservationRepository.save(reservation);
+    }
+
+    @Override
+    public Optional<Reservation> getOneById(int id) {
+        return reservationRepository.findById(id);
     }
 }
