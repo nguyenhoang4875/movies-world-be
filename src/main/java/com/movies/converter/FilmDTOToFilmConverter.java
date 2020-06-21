@@ -7,6 +7,7 @@ import com.movies.entity.dao.Genre;
 import com.movies.entity.dto.FilmDTO;
 import com.movies.entity.dto.GenreDTO;
 import com.movies.repository.FilmDescriptionRepository;
+import com.movies.repository.FilmRepository;
 import com.movies.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,9 @@ public class FilmDTOToFilmConverter extends Converter<FilmDTO, Film> {
     @Autowired
     private GenreRepository genreRepository;
 
+    @Autowired
+    private FilmRepository filmRepository;
+
     @Override
     public Film convert(FilmDTO source) {
         Film film = new Film();
@@ -32,10 +36,15 @@ public class FilmDTOToFilmConverter extends Converter<FilmDTO, Film> {
         film.setStatus(source.isStatus());
         if (source.getGenres() != null) {
             List<Genre> genres = new ArrayList<>();
+
             for (GenreDTO genre : source.getGenres()) {
                 genres.add(genreRepository.findByName(genre.getName()));
             }
             film.setGenres(genres);
+        }
+        if (source.getId() != null) {
+            Film film1 = filmRepository.findById(source.getId()).get();
+            source.getFilmDescription().setId(film1.getFilmDescription().getId());
         }
         FilmDescription filmDescription = filmDescriptionRepository.save(source.getFilmDescription());
         film.setFilmDescription(filmDescription);

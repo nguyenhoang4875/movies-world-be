@@ -61,4 +61,16 @@ public class FilmServiveImpl implements FilmService {
         filmRepository.save(film);
         return film;
     }
+
+    @Override
+    public Film updateFilm(Integer filmId, FilmDTO filmDTO) {
+        Film filmUpdate = filmRepository.getOne(filmId);
+        Film film = filmDtoToFilmDaoConverter.convert(filmDTO);
+        filmUpdate.setName(film.getName());
+        filmUpdate.setTrailer(film.getTrailer());
+        filmUpdate.setGenres(film.getGenres());
+        filmUpdate.setFilmDescription(film.getFilmDescription());
+        filmUpdate.setPoster(film.getPoster());
+        return filmUpdate;
+    }
 }
