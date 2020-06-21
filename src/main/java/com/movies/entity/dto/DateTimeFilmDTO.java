@@ -12,7 +12,7 @@ public class DateTimeFilmDTO {
     @JsonFormat(pattern = "E, dd-MM-yyyy")
     private LocalDate date;
 
-    @JsonFormat(pattern = "hh:mm:ss a")
+    @JsonFormat(pattern = "hh:mm a")
     private List<LocalDateTime> timeList;
 
     public DateTimeFilmDTO(LocalDate date) {

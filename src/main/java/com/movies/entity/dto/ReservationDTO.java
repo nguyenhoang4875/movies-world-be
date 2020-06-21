@@ -15,10 +15,10 @@ import java.util.List;
 public class ReservationDTO {
     private int id;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonFormat(pattern = "dd-MM-yyyy hh:mm:ss a")
     private LocalDateTime timeCreated;
 
-    private boolean status;
+    private int status;
 
     private int userId;
 
@@ -27,7 +27,7 @@ public class ReservationDTO {
 
     private String filmName;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonFormat(pattern = "dd-MM-yyyy hh:mm:ss a")
     @NotNull
     private LocalDateTime showTime;
 
