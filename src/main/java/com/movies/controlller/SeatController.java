@@ -1,9 +1,8 @@
 package com.movies.controlller;
 
-import com.movies.converter.bases.Converter;
 import com.movies.entity.dao.Seat;
 import com.movies.entity.dao.ShowTimeFilm;
-import com.movies.entity.dto.SeatDTO;
+import com.movies.exception.BadRequestException;
 import com.movies.service.SeatService;
 import com.movies.service.ShowTimeFilmService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +26,17 @@ public class SeatController {
     @Autowired
     private ShowTimeFilmService showTimeFilmService;
 
-    @Autowired
-    private Converter<Seat, SeatDTO> seatSeatDTOConverter;
-
     @GetMapping("/showTime")
     public List<List<Integer>> getSeatsByShowTimeFilm(@RequestParam("filmId") Integer filmId,
                                              @RequestParam("dateTime") String time) throws ParseException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss a");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm a");
         LocalDateTime dateTime = LocalDateTime.parse(time, formatter);
         ShowTimeFilm showTimeFilm = showTimeFilmService.getOneByFilmAndTime(filmId, dateTime);
-        List<Seat> seats = seatService.getAllByShowTimeFilm(showTimeFilm);
-        List<List<Integer>> rowSeatList = convertToRow(seats);
+        if (showTimeFilm == null) {
+            throw new BadRequestException("NOT FOUND SHOW TIME");
+        }
+
+        List<List<Integer>> rowSeatList = convertToRow(showTimeFilm.getSeats());
         return rowSeatList;
     }
 

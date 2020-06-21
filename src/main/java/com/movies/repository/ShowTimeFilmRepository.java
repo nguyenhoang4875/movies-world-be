@@ -21,12 +21,12 @@ public interface ShowTimeFilmRepository extends JpaRepository<ShowTimeFilm, Inte
 
     List<ShowTimeFilm> findAllByFilmId(Integer filmId);
 
-    @Query("Select distinct DATE(s.time) from ShowTimeFilm s where s.film.id = :filmId and s.time >= NOW() ")
+    @Query("Select distinct DATE(s.time) from ShowTimeFilm s where s.film.id = :filmId and s.time >= NOW() order by s.time ")
     List<java.sql.Date> findDate(@Param("filmId") Integer filmId);
 
-    @Query("Select distinct s.film from ShowTimeFilm s where DATE(s.time) = DATE(:d) and s.time >= NOW() ")
+    @Query("Select distinct s.film from ShowTimeFilm s where DATE(s.time) = DATE(:d) and s.time >= NOW()")
     List<Film> findFilmByDate(@Param("d") LocalDate date);
 
-    @Query("Select s.time from ShowTimeFilm s where s.film.id = :filmId and DATE(s.time) = DATE(:d) and s.time >= NOW() ")
+    @Query("Select distinct s.time from ShowTimeFilm s where s.film.id = :filmId and DATE(s.time) = DATE(:d) and s.time >= NOW() order by s.time")
     List<LocalDateTime> findTimeFromNow(@Param("filmId") Integer filmId, @Param("d") LocalDate date);
 }
