@@ -7,6 +7,8 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -17,10 +19,9 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time_create")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date timeCreate;
+    private LocalDateTime timeCreate;
 
     private Boolean status;
 

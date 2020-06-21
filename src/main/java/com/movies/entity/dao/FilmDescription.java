@@ -1,11 +1,10 @@
 package com.movies.entity.dao;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -15,20 +14,18 @@ public class FilmDescription implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "time_limit",nullable = false,length = 100)
+    @Column(name = "time_limit", nullable = false, length = 100)
     private String timeLimit;
 
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern="dd-MM-yyyy")
-    private Date premiere;
+    private LocalDate premiere;
 
-    @Column(nullable = false,length = 100)
+    @Column(nullable = false, length = 100)
     private String artist;
 
-    @Column(nullable = false,length = 100)
+    @Column(nullable = false, length = 100)
     private String director;
 
-    @Column(columnDefinition = "TEXT",nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     private String nation;
