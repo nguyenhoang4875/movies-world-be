@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,10 +50,13 @@ public class ReservationController {
 
     @PostMapping
     public ReservationDTO addReservation(Principal principal,
-                                         @RequestBody @Valid ReservationDTO reservationDTO) throws ParseException {
+                                         @RequestBody @Valid ReservationDTO reservationDTO) {
         User user = userService.findOneByUsername(principal.getName());
         ShowTimeFilm showTimeFilm = showTimeFilmService.getOneByFilmAndTime(reservationDTO.getFilmId(), reservationDTO.getShowTime());
 
+        if (showTimeFilm == null) {
+            throw new BadRequestException("NOT FOUND");
+        }
         //Add data to reservation table
         Reservation reservation = new Reservation();
         reservation.setStatus(0);
