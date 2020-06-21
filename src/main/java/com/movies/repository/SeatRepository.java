@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface SeatRepository extends JpaRepository<Seat,Integer> {
     List<Seat> findAllByShowTimeFilm(ShowTimeFilm showTimeFilm);
+
+    Seat findSeatByNameAndShowTimeFilm(String name, ShowTimeFilm showTimeFilm);
 }

@@ -4,7 +4,9 @@ import com.movies.entity.dao.ShowTimeFilm;
 import com.movies.entity.dto.FilmTimeDTO;
 import com.movies.entity.dto.ShowTimeFilmDto;
 
-import java.util.Date;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ShowTimeFilmService {
@@ -15,9 +17,9 @@ public interface ShowTimeFilmService {
 
     List<Date> getDateShow(Integer filmId);
 
-    List<Date> getTimeShow(Integer filmId, Date date);
+    List<LocalDateTime> getTimeShow(Integer filmId, LocalDate date);
 
-    List<FilmTimeDTO> getShowTimeInDay(Date d);
+    List<FilmTimeDTO> getShowTimeInDay(LocalDate d);
 
-    ShowTimeFilm getOneByFilmAndTime(Integer filmId, Date dateTime);
+    ShowTimeFilm getOneByFilmAndTime(int filmId, LocalDateTime dateTime);
 }

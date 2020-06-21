@@ -16,10 +16,11 @@ import com.movies.service.ShowTimeFilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -74,24 +75,19 @@ public class ShowTimeFilmServiceImpl implements ShowTimeFilmService {
     }
 
     @Override
-    public List<Date> getTimeShow(Integer filmId, Date date) {
+    public List<LocalDateTime> getTimeShow(Integer filmId, LocalDate date) {
         return showTimeFilmRepository.findTimeFromNow(filmId, date);
     }
 
     @Override
-    public List<FilmTimeDTO> getShowTimeInDay(Date d) {
+    public List<FilmTimeDTO> getShowTimeInDay(LocalDate d) {
         List<Film> films = showTimeFilmRepository.findFilmByDate(d);
         List<FilmTimeDTO> filmTimeDTOS = new ArrayList<>();
         for (Film film : films) {
             FilmTimeDTO filmTimeDTO = new FilmTimeDTO();
             filmTimeDTO.setFilm(filmFilmDTOConverter.convert(film));
-            List<Date> timeList = showTimeFilmRepository.findTimeFromNow(film.getId(), d);
-            List<String> stringList = new ArrayList<>();
-            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-            for (Date time: timeList) {
-                stringList.add(format.format(time));
-            }
-            filmTimeDTO.setTime(stringList);
+            List<LocalDateTime> timeList = showTimeFilmRepository.findTimeFromNow(film.getId(), d);
+            filmTimeDTO.setTime(timeList);
             filmTimeDTOS.add(filmTimeDTO);
         }
 
@@ -99,7 +95,7 @@ public class ShowTimeFilmServiceImpl implements ShowTimeFilmService {
     }
 
     @Override
-    public ShowTimeFilm getOneByFilmAndTime(Integer filmId, Date dateTime) {
+    public ShowTimeFilm getOneByFilmAndTime(int filmId, LocalDateTime dateTime) {
         return showTimeFilmRepository.findOneByFilmAndTime(filmId, dateTime);
     }
 
