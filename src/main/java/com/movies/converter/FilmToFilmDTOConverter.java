@@ -2,13 +2,19 @@ package com.movies.converter;
 
 import com.movies.converter.bases.Converter;
 import com.movies.entity.dao.Film;
+import com.movies.entity.dao.Genre;
 import com.movies.entity.dao.Rating;
 import com.movies.entity.dto.FilmDTO;
+import com.movies.entity.dto.GenreDTO;
 import com.movies.exception.BadRequestException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FilmToFilmDTOConverter extends Converter<Film, FilmDTO> {
+
+    @Autowired
+    private Converter<Genre, GenreDTO> genreDaoToGenreDtoConverter;
 
     @Override
     public FilmDTO convert(Film source) throws BadRequestException {
@@ -27,7 +33,7 @@ public class FilmToFilmDTOConverter extends Converter<Film, FilmDTO> {
         }
 
         if (source.getGenres() != null) {
-            filmDTO.setGenres(source.getGenres());
+            filmDTO.setGenres(genreDaoToGenreDtoConverter.convert(source.getGenres()));
         }
 
         float point = 0;

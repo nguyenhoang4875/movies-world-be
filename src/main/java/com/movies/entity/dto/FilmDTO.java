@@ -1,7 +1,6 @@
 package com.movies.entity.dto;
 
 import com.movies.entity.dao.FilmDescription;
-import com.movies.entity.dao.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,6 +34,6 @@ public class FilmDTO {
 
     private String postedUserName;
 
-    private List<Genre> genres;
+    private List<GenreDTO> genres;
 
 }
