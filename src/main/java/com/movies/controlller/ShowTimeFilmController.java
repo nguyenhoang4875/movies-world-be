@@ -33,7 +33,6 @@ public class ShowTimeFilmController {
         return showTimeFilmService.addShowTimeFilm(filmId, showTimeFilmDto);
     }
 
-
     @GetMapping("/dateTime")
     public List<DateTimeFilmDTO> getDateTimeOfFilm(@RequestParam("filmId") Integer filmId) {
         List<Date> dateList = showTimeFilmService.getDateShow(filmId);

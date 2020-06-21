@@ -6,11 +6,14 @@ import com.movies.entity.dao.Seat;
 import com.movies.entity.dao.ShowTimeFilm;
 import com.movies.entity.dao.User;
 import com.movies.entity.dto.ReservationDTO;
+import com.movies.exception.BadRequestException;
+import com.movies.exception.NotFoundException;
 import com.movies.service.ReservationService;
 import com.movies.service.SeatService;
 import com.movies.service.ShowTimeFilmService;
 import com.movies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -69,5 +72,23 @@ public class ReservationController {
 
         reservation.setSeats(seats);
         return reservationReservationDTOConverter.convert(reservation);
+    }
+
+    @DeleteMapping("/cancel/{id}")
+    public ResponseEntity<Reservation> cancelReservation(@PathVariable("id") int reservationId) {
+        Reservation reservation = reservationService.getOneById(reservationId).get();
+        if (reservation == null) {
+            throw new NotFoundException("NOT FOUND");
+        }
+        LocalDateTime timeShow = reservation.getSeats().get(0).getShowTimeFilm().getTime();
+        if (!checkIfTimeBeforeShowing(timeShow)) {
+            throw new BadRequestException("You can only cancel after 30 minutes before show time!");
+        } else {
+
+        }
+    }
+
+    private boolean checkIfTimeBeforeShowing(LocalDateTime timeShow) {
+
     }
 }
