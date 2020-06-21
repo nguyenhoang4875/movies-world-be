@@ -14,7 +14,7 @@ import java.util.List;
 public class FilmTimeDTO {
     private FilmDTO film;
 
-    @JsonFormat(pattern="HH:mm:ss")
+    @JsonFormat(pattern="hh:mm a")
     private List<LocalDateTime> time;
 
 }

@@ -19,10 +19,10 @@ public class ReservationToReservationDTOConverter extends Converter<Reservation,
         reservationDTO.setStatus(source.getStatus());
         reservationDTO.setUserId(source.getUser().getId());
         if (source.getSeats().size() > 0) {
-            reservationDTO.setFilmId(source.getSeats().get(0).getShowTimeFilm().getFilm().getId());
-            reservationDTO.setFilmName(source.getSeats().get(0).getShowTimeFilm().getFilm().getName());
-            reservationDTO.setShowTime(source.getSeats().get(0).getShowTimeFilm().getTime());
-            reservationDTO.setRoom(source.getSeats().get(0).getShowTimeFilm().getRoom().getName());
+            reservationDTO.setFilmId(source.getShowTimeFilm().getFilm().getId());
+            reservationDTO.setFilmName(source.getShowTimeFilm().getFilm().getName());
+            reservationDTO.setShowTime(source.getShowTimeFilm().getTime());
+            reservationDTO.setRoom(source.getShowTimeFilm().getRoom().getName());
             List<String> seats = new ArrayList<>();
             for (Seat seat : source.getSeats()) {
                 seats.add(seat.getName());

@@ -33,9 +33,8 @@ public class SeatController {
     @GetMapping("/showTime")
     public List<List<Integer>> getSeatsByShowTimeFilm(@RequestParam("filmId") Integer filmId,
                                              @RequestParam("dateTime") String time) throws ParseException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss a");
         LocalDateTime dateTime = LocalDateTime.parse(time, formatter);
-
         ShowTimeFilm showTimeFilm = showTimeFilmService.getOneByFilmAndTime(filmId, dateTime);
         List<Seat> seats = seatService.getAllByShowTimeFilm(showTimeFilm);
         List<List<Integer>> rowSeatList = convertToRow(seats);
