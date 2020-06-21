@@ -71,6 +71,7 @@ public class FilmServiveImpl implements FilmService {
         filmUpdate.setGenres(film.getGenres());
         filmUpdate.setFilmDescription(film.getFilmDescription());
         filmUpdate.setPoster(film.getPoster());
+        filmRepository.save(filmUpdate);
         return filmUpdate;
     }
 }
