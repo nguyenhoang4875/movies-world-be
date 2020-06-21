@@ -31,7 +31,7 @@ public class FilmToFilmDTOConverter extends Converter<Film, FilmDTO> {
         }
 
         float point = 0;
-        if (source.getRatings().size() != 0) {
+        if (source.getRatings() != null) {
             for (Rating rating : source.getRatings()) {
                 point += rating.getPoint();
             }
