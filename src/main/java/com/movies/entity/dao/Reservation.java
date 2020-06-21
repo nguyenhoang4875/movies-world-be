@@ -18,7 +18,7 @@ public class Reservation implements Serializable {
     @Column(name = "time")
     private LocalDateTime time;
 
-    private boolean status;
+    private int status;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
@@ -26,4 +26,8 @@ public class Reservation implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reservation")
     private List<Seat> seats;
+
+    @ManyToOne
+    @JoinColumn(name = "show_time_film_id")
+    private ShowTimeFilm showTimeFilm;
 }

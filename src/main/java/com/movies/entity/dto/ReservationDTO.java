@@ -18,7 +18,7 @@ public class ReservationDTO {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime timeCreated;
 
-    private boolean status;
+    private int status;
 
     private int userId;
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SeatServiceImpl implements SeatService {
@@ -27,5 +28,10 @@ public class SeatServiceImpl implements SeatService {
     @Override
     public Seat save(Seat seat) {
         return seatRepository.save(seat);
+    }
+
+    @Override
+    public Optional<Seat> getById(int id) {
+        return seatRepository.findById(id);
     }
 }
