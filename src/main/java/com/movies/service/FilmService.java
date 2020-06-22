@@ -22,4 +22,6 @@ public interface FilmService {
     List<Film> getAllFilms();
 
     Film addFilm(FilmDTO filmDTO);
+
+    Film updateFilm(Integer filmId, FilmDTO filmDTO);
 }

@@ -5,11 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -17,9 +15,8 @@ import java.util.Date;
 public class CommentDTO {
     private int id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern="dd-MM-yyyy hh:mm:ss a")
-    private Date timeCreate;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime timeCreate;
 
     private Boolean status;
 

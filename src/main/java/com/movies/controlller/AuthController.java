@@ -173,6 +173,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = tokenProvider.generateToken(authentication);
         UserDto userDto = userDaoToUserDtoConverter.convert(userService.findOneByUsername(login.getUsername()));
+        userDto.setExpired(tokenProvider.getExpirationDateFromToken(token));
         userDto.setToken(token);
         return ResponseEntity.ok(userDto);
     }

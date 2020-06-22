@@ -6,6 +6,7 @@ import com.movies.entity.dao.Rating;
 import com.movies.entity.dao.User;
 import com.movies.entity.dto.FilmDTO;
 import com.movies.exception.NotFoundException;
+import com.movies.service.FileStorageService;
 import com.movies.service.FilmService;
 import com.movies.service.RatingService;
 import com.movies.service.UserService;
@@ -21,6 +22,7 @@ import java.util.Optional;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/films")
 public class FilmController {
     @Autowired
@@ -34,6 +36,9 @@ public class FilmController {
 
     @Autowired
     private Converter<Film, FilmDTO> filmFilmDTOConverter;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @GetMapping
     public List<FilmDTO> getAllFilms() {
@@ -108,5 +113,11 @@ public class FilmController {
     @PostMapping
     public FilmDTO addFilm(@RequestBody FilmDTO filmDTO) {
         return filmFilmDTOConverter.convert(filmService.addFilm(filmDTO));
+    }
+
+    @PutMapping("/{filmId}")
+    public FilmDTO updateFilm(@PathVariable Integer filmId, @RequestBody FilmDTO filmDTO) {
+        filmDTO.setId(filmId);
+        return filmFilmDTOConverter.convert(filmService.updateFilm(filmId, filmDTO));
     }
 }

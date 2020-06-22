@@ -29,8 +29,23 @@ public class ShowTimeFilmController {
     }
 
     @PostMapping("/{filmId}")
-    public ShowTimeFilmDto addShowTimeFilmBy(@PathVariable Integer filmId, @RequestBody ShowTimeFilmDto showTimeFilmDto) {
+    public ShowTimeFilmDto addShowTimeFilm(@PathVariable Integer filmId, @RequestBody ShowTimeFilmDto showTimeFilmDto) {
         return showTimeFilmService.addShowTimeFilm(filmId, showTimeFilmDto);
+    }
+
+    @PutMapping("/{showTimeFilmId}")
+    public ShowTimeFilmDto updateShowTimeFilm(@PathVariable Integer showTimeFilmId, @RequestBody ShowTimeFilmDto showTimeFilmDto) {
+        return showTimeFilmService.updateShowTimeFilm(showTimeFilmId, showTimeFilmDto);
+    }
+
+    @DeleteMapping("/{showTimeFilmId}")
+    public void deleteShowTimeFilm(@PathVariable Integer showTimeFilmId) {
+         showTimeFilmService.deleteShowTimeFilm(showTimeFilmId);
+    }
+
+    @PostMapping("lists/{filmId}")
+    public void addShowTimeFilList(@PathVariable Integer filmId,@RequestBody List<ShowTimeFilmDto> showTimeFilmList){
+        showTimeFilmService.addShowTimeFilmList(filmId,showTimeFilmList);
     }
 
     @GetMapping("/dateTime")
