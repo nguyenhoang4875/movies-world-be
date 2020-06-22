@@ -4,9 +4,9 @@ import com.movies.converter.bases.Converter;
 import com.movies.entity.dao.Film;
 import com.movies.entity.dao.Rating;
 import com.movies.entity.dao.User;
+import com.movies.entity.dto.FilmBookingDTO;
 import com.movies.entity.dto.FilmDTO;
 import com.movies.exception.NotFoundException;
-import com.movies.service.FileStorageService;
 import com.movies.service.FilmService;
 import com.movies.service.RatingService;
 import com.movies.service.UserService;
@@ -36,9 +36,8 @@ public class FilmController {
 
     @Autowired
     private Converter<Film, FilmDTO> filmFilmDTOConverter;
-
     @Autowired
-    private FileStorageService fileStorageService;
+    private Converter<Film, FilmBookingDTO> filmFilmBookingDTOConverter;
 
     @GetMapping
     public List<FilmDTO> getAllFilms() {
@@ -56,6 +55,12 @@ public class FilmController {
     public List<FilmDTO> getComingSoonFilms() {
         List<Film> films = filmService.getComingSoonFilms();
         return filmFilmDTOConverter.convert(films);
+    }
+
+    @GetMapping("/booking")
+    public List<FilmBookingDTO> getFilms() {
+        List<Film> films = filmService.findAllFilmsForCustomer();
+        return filmFilmBookingDTOConverter.convert(films);
     }
 
     @GetMapping("/{id}")
