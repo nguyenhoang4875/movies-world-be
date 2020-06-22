@@ -3,6 +3,7 @@ package com.movies.service.impl;
 import com.movies.converter.bases.Converter;
 import com.movies.entity.dao.Film;
 import com.movies.entity.dto.FilmDTO;
+import com.movies.exception.NotFoundException;
 import com.movies.repository.FilmRepository;
 import com.movies.service.FilmService;
 import com.movies.service.UserService;
@@ -73,5 +74,17 @@ public class FilmServiveImpl implements FilmService {
         filmUpdate.setPoster(film.getPoster());
         filmRepository.save(filmUpdate);
         return filmUpdate;
+    }
+
+    @Override
+    public boolean updateStatusFilm(Integer filmId) {
+        Optional<Film> optionalFilm = filmRepository.findById(filmId);
+        if (optionalFilm.isPresent()) {
+            Film film = optionalFilm.get();
+            film.setStatus(!film.isStatus());
+            filmRepository.save(film);
+            return film.isStatus();
+        }
+        throw new NotFoundException("Not found film with id: " + filmId);
     }
 }
