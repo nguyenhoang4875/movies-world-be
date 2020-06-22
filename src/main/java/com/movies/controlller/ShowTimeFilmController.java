@@ -23,9 +23,14 @@ public class ShowTimeFilmController {
     @Autowired
     private ShowTimeFilmService showTimeFilmService;
 
-    @GetMapping("/{filmId}")
+    @GetMapping("films/{filmId}")
     public List<ShowTimeFilm> getShowTimeFilmByFilmId(@PathVariable Integer filmId) {
         return showTimeFilmService.getShowTimeFilmByFilmId(filmId);
+    }
+
+    @GetMapping("/{showTimeFilmId}")
+    public ShowTimeFilm getShowTimeFilmById(@PathVariable Integer showTimeFilmId) {
+        return showTimeFilmService.getShowTimeFilmById(showTimeFilmId);
     }
 
     @PostMapping("/{filmId}")

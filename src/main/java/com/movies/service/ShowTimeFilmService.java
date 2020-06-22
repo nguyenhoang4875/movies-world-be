@@ -28,4 +28,6 @@ public interface ShowTimeFilmService {
     ShowTimeFilmDto updateShowTimeFilm(Integer showTimeFilmId, ShowTimeFilmDto showTimeFilmDto);
 
     void deleteShowTimeFilm(Integer showTimeFilmId);
+
+    ShowTimeFilm getShowTimeFilmById(Integer showTimeFilmId);
 }

@@ -4,7 +4,6 @@ import com.movies.converter.bases.Converter;
 import com.movies.entity.dao.Film;
 import com.movies.entity.dao.Room;
 import com.movies.entity.dao.Seat;
-import com.movies.entity.dao.Room;
 import com.movies.entity.dao.ShowTimeFilm;
 import com.movies.entity.dto.FilmDTO;
 import com.movies.entity.dto.FilmTimeDTO;
@@ -127,9 +126,14 @@ public class ShowTimeFilmServiceImpl implements ShowTimeFilmService {
 
     @Override
     public void deleteShowTimeFilm(Integer showTimeFilmId) {
-        System.out.println("show time film id: "+ showTimeFilmId);
+        System.out.println("show time film id: " + showTimeFilmId);
         showTimeFilmRepository.delete(showTimeFilmRepository.getOne(showTimeFilmId));
 
+    }
+
+    @Override
+    public ShowTimeFilm getShowTimeFilmById(Integer showTimeFilmId) {
+        return showTimeFilmRepository.findById(showTimeFilmId).get();
     }
 
 
