@@ -27,6 +27,8 @@ public class ReservationDTO {
 
     private String filmName;
 
+    private String filmPoster;
+
     @JsonFormat(pattern = "dd-MM-yyyy hh:mm a")
     @NotNull
     private LocalDateTime showTime;
