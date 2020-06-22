@@ -37,7 +37,7 @@ public class FilmToFilmDTOConverter extends Converter<Film, FilmDTO> {
             }
             point = point / source.getRatings().size();
         }
-        filmDTO.setRatePoint(point);
+        filmDTO.setRatePoint((float) Math.round(point * 10) / 10);
         return filmDTO;
     }
 }
