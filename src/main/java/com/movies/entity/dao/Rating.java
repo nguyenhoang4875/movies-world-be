@@ -6,6 +6,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.io.Serializable;
 
@@ -30,6 +31,6 @@ public class Rating implements Serializable {
     private Film film;
 
     @Min(value = 1, message = "Invalid point")
-    @Min(value = 5, message = "Invalid point")
+    @Max(value = 5, message = "Invalid point")
     private int point;
 }
