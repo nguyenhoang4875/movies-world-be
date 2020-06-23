@@ -106,7 +106,7 @@ public class AuthController {
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
 
-            StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \"http://localhost/register/post\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
+            StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \"192.168.10.169/register/post\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
             httpPost.setEntity(entity);
             HttpResponse httpResponse = client.execute(httpPost);
             String content = IOUtils.toString(httpResponse.getEntity().getContent());

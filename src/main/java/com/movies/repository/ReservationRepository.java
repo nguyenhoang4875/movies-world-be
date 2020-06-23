@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
-    List<Reservation> findAllByUser(User user);
+    List<Reservation> findAllByUserOrderByTimeDesc(User user);
 }
