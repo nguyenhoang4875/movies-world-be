@@ -15,7 +15,7 @@ public interface ShowTimeFilmService {
 
     ShowTimeFilmDto addShowTimeFilm(Integer filmId, ShowTimeFilmDto showTimeFilmDto);
 
-    List<Date> getDateShow(Integer filmId);
+    List<LocalDateTime> getDateShow(Integer filmId);
 
     List<LocalDateTime> getTimeShow(Integer filmId, LocalDate date);
 

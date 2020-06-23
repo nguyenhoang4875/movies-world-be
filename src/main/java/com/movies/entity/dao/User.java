@@ -40,6 +40,7 @@ public class User implements Serializable {
     private String fullName;
 
     @Email
+    @NonNull
     @NotBlank(message = "Email is mandatory")
     private String email;
 

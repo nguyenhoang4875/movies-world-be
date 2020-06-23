@@ -70,7 +70,7 @@ public class ShowTimeFilmServiceImpl implements ShowTimeFilmService {
     }
 
     @Override
-    public List<Date> getDateShow(Integer filmId) {
+    public List<LocalDateTime> getDateShow(Integer filmId) {
         return showTimeFilmRepository.findDate(filmId);
     }
 

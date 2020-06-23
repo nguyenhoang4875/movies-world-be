@@ -55,9 +55,9 @@ public class ShowTimeFilmController {
 
     @GetMapping("/dateTime")
     public List<DateTimeFilmDTO> getDateTimeOfFilm(@RequestParam("filmId") Integer filmId) {
-        List<Date> dateList = showTimeFilmService.getDateShow(filmId);
+        List<LocalDateTime> dateList = showTimeFilmService.getDateShow(filmId);
         List<DateTimeFilmDTO> dateTimeFilmDTOS = new ArrayList<>();
-        for (Date date : dateList) {
+        for ( LocalDateTime date : dateList) {
             DateTimeFilmDTO dateTimeFilmDTO = new DateTimeFilmDTO(date.toLocalDate());
             List<LocalDateTime> timeList = showTimeFilmService.getTimeShow(filmId, date.toLocalDate());
             dateTimeFilmDTO.setTimeList(timeList);
