@@ -8,7 +8,6 @@ import com.movies.service.ShowTimeFilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/showtimefilms")
 public class ShowTimeFilmController {
 
@@ -45,19 +45,19 @@ public class ShowTimeFilmController {
 
     @DeleteMapping("/{showTimeFilmId}")
     public void deleteShowTimeFilm(@PathVariable Integer showTimeFilmId) {
-         showTimeFilmService.deleteShowTimeFilm(showTimeFilmId);
+        showTimeFilmService.deleteShowTimeFilm(showTimeFilmId);
     }
 
     @PostMapping("lists/{filmId}")
-    public void addShowTimeFilList(@PathVariable Integer filmId,@RequestBody List<ShowTimeFilmDto> showTimeFilmList){
-        showTimeFilmService.addShowTimeFilmList(filmId,showTimeFilmList);
+    public void addShowTimeFilList(@PathVariable Integer filmId, @RequestBody List<ShowTimeFilmDto> showTimeFilmList) {
+        showTimeFilmService.addShowTimeFilmList(filmId, showTimeFilmList);
     }
 
     @GetMapping("/dateTime")
     public List<DateTimeFilmDTO> getDateTimeOfFilm(@RequestParam("filmId") Integer filmId) {
         List<LocalDateTime> dateList = showTimeFilmService.getDateShow(filmId);
         List<DateTimeFilmDTO> dateTimeFilmDTOS = new ArrayList<>();
-        for ( LocalDateTime date : dateList) {
+        for (LocalDateTime date : dateList) {
             DateTimeFilmDTO dateTimeFilmDTO = new DateTimeFilmDTO(date.toLocalDate());
             List<LocalDateTime> timeList = showTimeFilmService.getTimeShow(filmId, date.toLocalDate());
             dateTimeFilmDTO.setTimeList(timeList);

@@ -19,7 +19,6 @@ public class ShowTimeFilm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonFormat(pattern="E dd-MM-yyyy HH:mm:ss")
     private LocalDateTime time;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
