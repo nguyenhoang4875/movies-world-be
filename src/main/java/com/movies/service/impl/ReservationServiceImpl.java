@@ -17,7 +17,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<Reservation> findReservationByUser(User user) {
-        return reservationRepository.findAllByUser(user);
+        return reservationRepository.findAllByUserOrderByTimeDesc(user);
     }
 
     @Override
