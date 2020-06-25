@@ -14,7 +14,9 @@ public class SeatToSeatDTOConverter extends Converter<Seat, SeatDTO> {
         seatDTO.setName(source.getName());
         seatDTO.setStatus(source.getStatus());
         seatDTO.setShowTimeFilmId(source.getShowTimeFilm().getId());
-        seatDTO.setReservationId(source.getReservation().getId());
+        if (source.getReservation() != null) {
+            seatDTO.setReservationId(source.getReservation().getId());
+        }
         return seatDTO;
     }
 }

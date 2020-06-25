@@ -1,7 +1,9 @@
 package com.movies.controlller;
 
+import com.movies.converter.bases.Converter;
 import com.movies.entity.dao.Seat;
 import com.movies.entity.dao.ShowTimeFilm;
+import com.movies.entity.dto.SeatDTO;
 import com.movies.exception.BadRequestException;
 import com.movies.service.SeatService;
 import com.movies.service.ShowTimeFilmService;
@@ -23,6 +25,16 @@ public class SeatController {
 
     @Autowired
     private ShowTimeFilmService showTimeFilmService;
+
+    @Autowired
+    private Converter<Seat, SeatDTO> seatSeatDTOConverter;
+
+    @GetMapping("/showTimeFilm/{id}")
+    public List<SeatDTO> getListSeatByShowTimeFilm(@PathVariable("id") int showTimeFilmId) {
+        ShowTimeFilm showTimeFilm = showTimeFilmService.getShowTimeFilmById(showTimeFilmId);
+        List<Seat> seats = seatService.getAllByShowTimeFilm(showTimeFilm);
+        return seatSeatDTOConverter.convert(seats);
+    }
 
     @GetMapping("/showTime")
     public List<List<Integer>> getSeatsByShowTimeFilm(@RequestParam("filmId") Integer filmId,

@@ -42,6 +42,12 @@ public class ReservationController {
     @Autowired
     private Converter<Reservation, ReservationDTO> reservationReservationDTOConverter;
 
+    @GetMapping("/{id}")
+    public ReservationDTO getReservationById(@PathVariable int id) {
+        Reservation reservation = reservationService.getOneById(id).get();
+        return reservationReservationDTOConverter.convert(reservation);
+    }
+
     @GetMapping("/history")
     public List<ReservationDTO> getReservationHistory(Principal principal) {
         User user = userService.findOneByUsername(principal.getName());

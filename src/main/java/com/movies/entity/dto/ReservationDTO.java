@@ -22,6 +22,10 @@ public class ReservationDTO {
 
     private int userId;
 
+    private String fullNameUser;
+
+    private String emailUser;
+
     @NotNull
     private int filmId;
 

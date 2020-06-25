@@ -18,6 +18,8 @@ public class ReservationToReservationDTOConverter extends Converter<Reservation,
         reservationDTO.setTimeCreated(source.getTime());
         reservationDTO.setStatus(source.getStatus());
         reservationDTO.setUserId(source.getUser().getId());
+        reservationDTO.setFullNameUser(source.getUser().getFullName());
+        reservationDTO.setEmailUser(source.getUser().getEmail());
         reservationDTO.setFilmId(source.getShowTimeFilm().getFilm().getId());
         reservationDTO.setFilmName(source.getShowTimeFilm().getFilm().getName());
         reservationDTO.setFilmPoster(source.getShowTimeFilm().getFilm().getPoster());

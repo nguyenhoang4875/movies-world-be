@@ -17,7 +17,7 @@ public class SeatServiceImpl implements SeatService {
 
     @Override
     public List<Seat> getAllByShowTimeFilm(ShowTimeFilm showTimeFilm) {
-        return seatRepository.findAllByShowTimeFilm(showTimeFilm);
+        return seatRepository.findAllByShowTimeFilmOrderByName(showTimeFilm);
     }
 
     @Override
