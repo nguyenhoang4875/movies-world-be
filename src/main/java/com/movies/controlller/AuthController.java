@@ -105,16 +105,16 @@ public class AuthController {
             HttpPost httpPost = new HttpPost("https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=AIzaSyAhq8rlkSp1UBN8oLjmI8IvLubtTx03gNU");
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
+            String link = "http://localhost/register/post?token="+ confirmationToken.getToken();
 
-            StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \"192.168.10.169/register/post\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
+            StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \""+link+"\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
             httpPost.setEntity(entity);
             HttpResponse httpResponse = client.execute(httpPost);
             String content = IOUtils.toString(httpResponse.getEntity().getContent());
             JSONObject jsonResult = new JSONObject(content);
-            String link = jsonResult.getString("shortLink");
+            String shortlink = jsonResult.getString("shortLink");
 
-            mailMessage.setText("To confirm your account, please click here : "
-                    + link + "?token=" + confirmationToken.getToken());
+            mailMessage.setText("To confirm your account, please click here : " + shortlink );
             javaMailSender.send(mailMessage);
             MessageResponse msg = new MessageResponse(
                     HttpStatus.OK.value(),
@@ -229,15 +229,15 @@ public class AuthController {
         httpPost.setHeader("Accept", "application/json");
         httpPost.setHeader("Content-type", "application/json");
 
-        StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \"http://localhost/reset-password\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
+        String link = "http://localhost/resetPass/post?token="+ token;
+        StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \""+link+"\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
         httpPost.setEntity(entity);
         HttpResponse httpResponse = client.execute(httpPost);
         String content = IOUtils.toString(httpResponse.getEntity().getContent());
         JSONObject jsonResult = new JSONObject(content);
-        String link = jsonResult.getString("shortLink");
+        String shortlink = jsonResult.getString("shortLink");
 
-        mailMessage.setText("To reset your password, please click here : "
-                + link +"?token=" + token);
+        mailMessage.setText("To reset your password, please click here : " + shortlink );
         javaMailSender.send(mailMessage);
         MessageResponse msg = new MessageResponse(
                 HttpStatus.OK.value(),
