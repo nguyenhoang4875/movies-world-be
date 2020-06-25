@@ -24,4 +24,6 @@ public interface FilmService {
     Film addFilm(FilmDTO filmDTO);
 
     Film updateFilm(Integer filmId, FilmDTO filmDTO);
+
+    boolean updateStatusFilm(Integer filmId);
 }

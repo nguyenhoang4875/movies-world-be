@@ -125,4 +125,9 @@ public class FilmController {
         filmDTO.setId(filmId);
         return filmFilmDTOConverter.convert(filmService.updateFilm(filmId, filmDTO));
     }
+
+    @PutMapping("update-status/{filmId}")
+    public boolean updateStatusFilm(@PathVariable Integer filmId) {
+        return filmService.updateStatusFilm(filmId);
+    }
 }
