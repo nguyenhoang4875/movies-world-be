@@ -89,6 +89,7 @@ public class AuthController {
         } else {
             user.setEnable(false);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setAvatar("Default-Profile.png");
             Set<Role> tempRoles = new HashSet<>();
             tempRoles.add(roleService.findOneByName("ROLE_CUSTOMER"));
             user.setRoles(tempRoles);
