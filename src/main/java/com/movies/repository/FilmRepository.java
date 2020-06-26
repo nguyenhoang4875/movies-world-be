@@ -23,7 +23,7 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 
     @Query("Select distinct f from Film f join f.filmDescription d left join f.showTimeFilms s " +
             "where (DATE(d.premiere) >= DATE(NOW()) or DATE(s.time) = DATE(NOW())) and f.status = true " +
-            "and f.name LIKE %:name%")
+            "and lower(f.name) LIKE %:name% ")
     List<Film> findAllFilmsByNameForCustomer(@Param("name") String name);
 
 }

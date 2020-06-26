@@ -78,7 +78,7 @@ public class FilmController {
         if (name == null) {
             films = filmService.findAllFilmsForCustomer();
         } else {
-            films = filmService.findAllFilmsByNameForCustomer(name);
+            films = filmService.findAllFilmsByNameForCustomer(name.trim().toLowerCase());
         }
         return filmFilmDTOConverter.convert(films);
     }
