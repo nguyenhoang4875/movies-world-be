@@ -222,7 +222,7 @@ public class AuthController {
         //send email
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(userEmail);
-        mailMessage.setSubject("Complete Registration!");
+        mailMessage.setSubject("Reset password!");
         mailMessage.setFrom("thutranglop92@gmail.com");
         //create short link in firebase
         CloseableHttpClient client = HttpClients.createDefault();

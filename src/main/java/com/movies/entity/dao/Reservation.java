@@ -20,6 +20,9 @@ public class Reservation implements Serializable {
 
     private int status;
 
+    @Column(unique = true, nullable = false)
+    private String code;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private User user;
