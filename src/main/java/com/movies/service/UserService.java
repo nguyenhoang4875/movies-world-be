@@ -34,4 +34,6 @@ public interface UserService {
     User getCurrentUser();
 
     UserDetailDto getUserById(Integer userId);
+
+    List<UserDetailDto> search(String keyword);
 }

@@ -130,4 +130,9 @@ public class FilmController {
     public boolean updateStatusFilm(@PathVariable Integer filmId) {
         return filmService.updateStatusFilm(filmId);
     }
+
+    @GetMapping("/search")
+    public List<FilmDTO> search(@RequestParam String keyword) {
+        return filmFilmDTOConverter.convert(filmService.search(keyword));
+    }
 }

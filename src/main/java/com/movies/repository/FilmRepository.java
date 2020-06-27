@@ -26,4 +26,6 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
             "and lower(f.name) LIKE %:name% ")
     List<Film> findAllFilmsByNameForCustomer(@Param("name") String name);
 
+    List<Film> findByNameContainingOrAndGenresNameContaining(String name, String genreName);
+
 }
