@@ -20,6 +20,8 @@ public class ReservationDTO {
 
     private int status;
 
+    private String code;
+
     private int userId;
 
     private String fullNameUser;

@@ -12,9 +12,12 @@ import com.movies.service.ReservationService;
 import com.movies.service.SeatService;
 import com.movies.service.ShowTimeFilmService;
 import com.movies.service.UserService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,6 +35,9 @@ public class ReservationController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @Autowired
     private SeatService seatService;
@@ -68,6 +74,8 @@ public class ReservationController {
         Reservation reservation = new Reservation();
         reservation.setStatus(0);
         reservation.setTime(LocalDateTime.now());
+        String code = RandomStringUtils.randomAlphanumeric(6);
+        reservation.setCode(code);
         reservation.setUser(user);
         reservation.setShowTimeFilm(showTimeFilm);
         reservationService.save(reservation);
@@ -82,6 +90,14 @@ public class ReservationController {
         }
 
         reservation.setSeats(seats);
+        //send code to mail
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject("Complete Reservation!");
+        mailMessage.setFrom("thutranglop92@gmail.com");
+        mailMessage.setText("You have created successfully your reservation, this is your code ticket : " + code );
+        javaMailSender.send(mailMessage);
+
         return reservationReservationDTOConverter.convert(reservation);
     }
 
