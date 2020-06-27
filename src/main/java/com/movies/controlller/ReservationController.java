@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,11 +92,22 @@ public class ReservationController {
 
         reservation.setSeats(seats);
         //send code to mail
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm a");
+        String dateTime = formatter.format(showTimeFilm.getTime());
+        String seatstr = reservationDTO.getSeat().toString();
+        seatstr = seatstr.substring(1, seatstr.indexOf(']'));
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("Complete Reservation!");
         mailMessage.setFrom("thutranglop92@gmail.com");
-        mailMessage.setText("You have created successfully your reservation, this is your code ticket : " + code );
+        mailMessage.setText("You have created successfully your reservation, this is your code ticket : " + code
+                +"\n\n FILM INFORMATION:"
+                +"\n Film: " + showTimeFilm.getFilm().getName()
+                +"\n Show Time: "+ dateTime
+                +"\n Room: "+ showTimeFilm.getRoom().getName()
+                +"\n Seat: "+seatstr
+                +"\n\n Thank you for using our service. Have fun watching movies!"
+        );
         javaMailSender.send(mailMessage);
 
         return reservationReservationDTOConverter.convert(reservation);
