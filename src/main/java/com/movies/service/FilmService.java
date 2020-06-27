@@ -28,4 +28,6 @@ public interface FilmService {
     boolean updateStatusFilm(Integer filmId);
 
     List<Film> search(String keyword);
+
+    void deleteFilm(Integer filmId);
 }

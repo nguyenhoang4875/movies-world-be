@@ -135,4 +135,9 @@ public class FilmController {
     public List<FilmDTO> search(@RequestParam String keyword) {
         return filmFilmDTOConverter.convert(filmService.search(keyword));
     }
+
+    @DeleteMapping("/{filmId}")
+    public void deleteFilm(@PathVariable Integer filmId) {
+        filmService.deleteFilm(filmId);
+    }
 }

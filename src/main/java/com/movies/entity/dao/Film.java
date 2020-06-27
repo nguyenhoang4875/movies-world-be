@@ -28,7 +28,7 @@ public class Film implements Serializable {
 
     private boolean status;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "desc_id")
     private FilmDescription filmDescription;
 

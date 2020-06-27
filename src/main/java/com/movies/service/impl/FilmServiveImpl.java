@@ -2,14 +2,17 @@ package com.movies.service.impl;
 
 import com.movies.converter.bases.Converter;
 import com.movies.entity.dao.Film;
+import com.movies.entity.dao.ShowTimeFilm;
 import com.movies.entity.dto.FilmDTO;
 import com.movies.exception.NotFoundException;
 import com.movies.repository.FilmRepository;
 import com.movies.service.FilmService;
+import com.movies.service.ShowTimeFilmService;
 import com.movies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +23,9 @@ public class FilmServiveImpl implements FilmService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ShowTimeFilmService showTimeFilmService;
 
     @Autowired
     private Converter<FilmDTO, Film> filmDtoToFilmDaoConverter;
@@ -90,6 +96,18 @@ public class FilmServiveImpl implements FilmService {
 
     @Override
     public List<Film> search(String keyword) {
-        return filmRepository.findByNameContainingOrAndGenresNameContaining(keyword,keyword);
+        return filmRepository.findByNameContainingOrAndGenresNameContaining(keyword, keyword);
+    }
+
+    @Override
+    public void deleteFilm(Integer filmId) {
+        Film film = filmRepository.findById(filmId).get();
+
+        for (ShowTimeFilm showTimeFilm : film.getShowTimeFilms()) {
+            showTimeFilmService.deleteShowTimeFilm(showTimeFilm.getId());
+        }
+
+        film.setGenres(new ArrayList<>());
+        filmRepository.delete(film);
     }
 }
