@@ -87,4 +87,9 @@ public class FilmServiveImpl implements FilmService {
         }
         throw new NotFoundException("Not found film with id: " + filmId);
     }
+
+    @Override
+    public List<Film> search(String keyword) {
+        return filmRepository.findByNameContainingOrAndGenresNameContaining(keyword,keyword);
+    }
 }

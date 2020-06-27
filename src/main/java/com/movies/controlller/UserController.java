@@ -2,6 +2,7 @@ package com.movies.controlller;
 
 import com.movies.entity.dao.UploadFileResponse;
 import com.movies.entity.dao.User;
+import com.movies.entity.dto.FilmDTO;
 import com.movies.entity.dto.UserDetailDto;
 import com.movies.service.FileStorageService;
 import com.movies.service.UserService;
@@ -57,6 +58,11 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable Integer userId) {
         userService.delete(userId);
+    }
+
+    @GetMapping("/search")
+    public List<UserDetailDto> search(@RequestParam String keyword) {
+        return userService.search(keyword);
     }
 
 }

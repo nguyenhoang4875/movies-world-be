@@ -1,10 +1,10 @@
 package com.movies.service.impl;
 
-import com.movies.entity.dao.PasswordResetToken;
-import com.movies.repository.PasswordResetTokenRepository;
 import com.movies.converter.bases.Converter;
+import com.movies.entity.dao.PasswordResetToken;
 import com.movies.entity.dao.User;
 import com.movies.entity.dto.UserDetailDto;
+import com.movies.repository.PasswordResetTokenRepository;
 import com.movies.repository.UserRepository;
 import com.movies.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
-
 import java.util.List;
 
 @Service
@@ -129,6 +128,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetailDto getUserById(Integer userId) {
         return userDaoToUserDetailDtoConverter.convert(userRepository.getOne(userId));
+    }
+
+    @Override
+    public List<UserDetailDto> search(String keyword) {
+        return userDaoToUserDetailDtoConverter.convert(userRepository.findByUsernameContainingOrEmailContainingOrFullNameContainingOrPhoneContainingOrAddressContaining(keyword, keyword, keyword, keyword, keyword));
     }
 
 }

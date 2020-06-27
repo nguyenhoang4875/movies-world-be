@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
     List<Reservation> findAllByUserOrderByTimeDesc(User user);
+
+    List<Reservation> findByShowTimeFilmId(Integer filmId);
 }

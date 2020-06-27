@@ -3,15 +3,13 @@ package com.movies.repository;
 import com.movies.entity.dao.Film;
 import com.movies.entity.dao.ShowTimeFilm;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -29,4 +27,9 @@ public interface ShowTimeFilmRepository extends JpaRepository<ShowTimeFilm, Inte
 
     @Query("Select distinct s.time from ShowTimeFilm s where s.film.id = :filmId and DATE(s.time) = DATE(:d) and s.time >= NOW() order by s.time")
     List<LocalDateTime> findTimeFromNow(@Param("filmId") Integer filmId, @Param("d") LocalDate date);
+
+
+    @Modifying
+    @Query("delete  from ShowTimeFilm s where s.id = :showTimeFilmId")
+    void deleteShowTimeFilm(@Param("showTimeFilmId") Integer showTimeFilmId);
 }

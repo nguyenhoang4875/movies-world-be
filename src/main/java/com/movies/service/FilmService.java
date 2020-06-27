@@ -26,4 +26,6 @@ public interface FilmService {
     Film updateFilm(Integer filmId, FilmDTO filmDTO);
 
     boolean updateStatusFilm(Integer filmId);
+
+    List<Film> search(String keyword);
 }
