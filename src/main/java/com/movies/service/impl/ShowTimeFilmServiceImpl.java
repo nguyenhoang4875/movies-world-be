@@ -1,22 +1,16 @@
 package com.movies.service.impl;
 
 import com.movies.converter.bases.Converter;
-import com.movies.entity.dao.Film;
-import com.movies.entity.dao.Room;
-import com.movies.entity.dao.Seat;
-import com.movies.entity.dao.ShowTimeFilm;
+import com.movies.entity.dao.*;
 import com.movies.entity.dto.FilmDTO;
 import com.movies.entity.dto.FilmTimeDTO;
 import com.movies.entity.dto.ShowTimeFilmDto;
-import com.movies.repository.FilmRepository;
-import com.movies.repository.RoomRepository;
-import com.movies.repository.SeatRepository;
-import com.movies.repository.ShowTimeFilmRepository;
+import com.movies.repository.*;
 import com.movies.service.ShowTimeFilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,6 +34,9 @@ public class ShowTimeFilmServiceImpl implements ShowTimeFilmService {
 
     @Autowired
     private SeatRepository seatRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     @Override
     public List<ShowTimeFilm> getShowTimeFilmByFilmId(Integer filmId) {
@@ -125,16 +122,31 @@ public class ShowTimeFilmServiceImpl implements ShowTimeFilmService {
     }
 
     @Override
+    @Transactional
     public void deleteShowTimeFilm(Integer showTimeFilmId) {
-        System.out.println("show time film id: " + showTimeFilmId);
-        showTimeFilmRepository.delete(showTimeFilmRepository.getOne(showTimeFilmId));
+        ShowTimeFilm showTimeFilm = showTimeFilmRepository.findById(showTimeFilmId).get();
+        Film film = filmRepository.findById(showTimeFilm.getFilm().getId()).get();
+        film.getShowTimeFilms().remove(showTimeFilm);
+        showTimeFilm.setRoom(null);
+        showTimeFilm.setFilm(null);
+        List<Reservation> reservations = reservationRepository.findByShowTimeFilmId(showTimeFilmId);
+        if (reservations != null) {
 
+            for (Reservation reservation : reservations) {
+                reservationRepository.delete(reservation);
+            }
+        }
+
+        for (Seat seat : showTimeFilm.getSeats()) {
+            seatRepository.delete(seat);
+        }
+        showTimeFilm.setSeats(new ArrayList<>());
+        showTimeFilmRepository.deleteShowTimeFilm(showTimeFilmId);
     }
 
     @Override
     public ShowTimeFilm getShowTimeFilmById(Integer showTimeFilmId) {
         return showTimeFilmRepository.findById(showTimeFilmId).get();
     }
-
 
 }

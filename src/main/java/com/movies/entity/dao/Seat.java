@@ -23,7 +23,7 @@ public class Seat implements Serializable {
     @JsonIgnore
     private ShowTimeFilm showTimeFilm;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "reservation_id")
     private Reservation reservation;
 }
