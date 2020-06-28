@@ -8,7 +8,6 @@ import com.movies.service.ShowTimeFilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -67,7 +66,7 @@ public class ShowTimeFilmController {
     }
 
     @GetMapping("/filmInDate")
-    public List<FilmTimeDTO> getShowTimeInDay(@RequestParam("date") String date) throws ParseException, ParseException {
+    public List<FilmTimeDTO> getShowTimeInDay(@RequestParam("date") String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate dateTime = LocalDate.parse(date, formatter);
         List<FilmTimeDTO> filmTimeDTOS = showTimeFilmService.getShowTimeInDay(dateTime);

@@ -20,4 +20,9 @@ public class ConfirmationTokenServiceImpl implements ConfirmationTokenService {
     public ConfirmationToken findByToken(String token) {
         return confirmationTokenRepository.findByToken(token);
     }
+
+    @Override
+    public void deleteToke(ConfirmationToken confirmationToken) {
+        confirmationTokenRepository.delete(confirmationToken);
+    }
 }

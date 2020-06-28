@@ -106,16 +106,16 @@ public class AuthController {
             HttpPost httpPost = new HttpPost("https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=AIzaSyAhq8rlkSp1UBN8oLjmI8IvLubtTx03gNU");
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("Content-type", "application/json");
-            String link = "http://localhost/register/post?token="+ confirmationToken.getToken();
+            String link = "http://localhost/register/post?token=" + confirmationToken.getToken();
 
-            StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \""+link+"\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
+            StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \"" + link + "\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
             httpPost.setEntity(entity);
             HttpResponse httpResponse = client.execute(httpPost);
             String content = IOUtils.toString(httpResponse.getEntity().getContent());
             JSONObject jsonResult = new JSONObject(content);
             String shortlink = jsonResult.getString("shortLink");
 
-            mailMessage.setText("To confirm your account, please click here : " + shortlink );
+            mailMessage.setText("To confirm your account, please click here : " + shortlink);
             javaMailSender.send(mailMessage);
             MessageResponse msg = new MessageResponse(
                     HttpStatus.OK.value(),
@@ -147,6 +147,7 @@ public class AuthController {
             User user = userService.findOneByUsername(token.getUser().getUsername());
             user.setEnable(true);
             userService.save(user);
+            confirmationTokenService.deleteToke(token);
             MessageResponse msg = new MessageResponse(
                     HttpStatus.OK.value(),
                     "SUCCESS",
@@ -222,7 +223,7 @@ public class AuthController {
         //send email
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(userEmail);
-        mailMessage.setSubject("Complete Registration!");
+        mailMessage.setSubject("Reset password!");
         mailMessage.setFrom("thutranglop92@gmail.com");
         //create short link in firebase
         CloseableHttpClient client = HttpClients.createDefault();
@@ -230,15 +231,15 @@ public class AuthController {
         httpPost.setHeader("Accept", "application/json");
         httpPost.setHeader("Content-type", "application/json");
 
-        String link = "http://localhost/resetPass/post?token="+ token;
-        StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \""+link+"\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
+        String link = "http://localhost/resetPass/post?token=" + token;
+        StringEntity entity = new StringEntity("{\"dynamicLinkInfo\": {\"domainUriPrefix\": \"https://moviesworld.page.link\", \"link\": \"" + link + "\",\"androidInfo\":{\"androidPackageName\": \"com.example.MovieWorld\"}}}");
         httpPost.setEntity(entity);
         HttpResponse httpResponse = client.execute(httpPost);
         String content = IOUtils.toString(httpResponse.getEntity().getContent());
         JSONObject jsonResult = new JSONObject(content);
         String shortlink = jsonResult.getString("shortLink");
 
-        mailMessage.setText("To reset your password, please click here : " + shortlink );
+        mailMessage.setText("To reset your password, please click here : " + shortlink);
         javaMailSender.send(mailMessage);
         MessageResponse msg = new MessageResponse(
                 HttpStatus.OK.value(),
