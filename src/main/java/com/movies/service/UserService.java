@@ -35,5 +35,5 @@ public interface UserService {
 
     UserDetailDto getUserById(Integer userId);
 
-    List<UserDetailDto> search(String keyword);
+    List<UserDetailDto> search(String keyword, String roleName);
 }

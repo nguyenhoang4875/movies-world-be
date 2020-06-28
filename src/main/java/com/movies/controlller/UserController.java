@@ -62,7 +62,12 @@ public class UserController {
 
     @GetMapping("/search")
     public List<UserDetailDto> search(@RequestParam String keyword) {
-        return userService.search(keyword);
+        return userService.search(keyword,"ROLE_CUSTOMER");
+    }
+
+    @GetMapping("staffs/search")
+    public List<UserDetailDto> searchStaff(@RequestParam String keyword) {
+        return userService.search(keyword,"ROLE_STAFF");
     }
 
 }

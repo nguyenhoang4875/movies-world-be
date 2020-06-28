@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -131,8 +132,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDetailDto> search(String keyword) {
-        return userDaoToUserDetailDtoConverter.convert(userRepository.findByUsernameContainingOrEmailContainingOrFullNameContainingOrPhoneContainingOrAddressContaining(keyword, keyword, keyword, keyword, keyword));
+    public List<UserDetailDto> search(String keyword, String roleName) {
+
+        keyword = keyword.toLowerCase().trim();
+        List<User> userList = userRepository.findByRolesName(roleName);
+        List<User> results = new ArrayList<>();
+
+        for (User user : userList) {
+            if (user.getUsername().toLowerCase().contains(keyword) ||
+                    user.getFullName().toLowerCase().contains(keyword) ||
+                    user.getEmail().toLowerCase().contains(keyword) ||
+                    user.getAddress().toLowerCase().contains(keyword) ||
+                    user.getPhone().toLowerCase().contains(keyword)
+            ) {
+                results.add(user);
+            }
+        }
+        return userDaoToUserDetailDtoConverter.convert(results);
     }
 
 }
