@@ -45,8 +45,9 @@ public class SeatController {
         if (showTimeFilm == null) {
             throw new BadRequestException("NOT FOUND SHOW TIME");
         }
+        List<Seat> seatList = seatService.getAllByShowTimeFilm(showTimeFilm);
 
-        List<List<Integer>> rowSeatList = convertToRow(showTimeFilm.getSeats());
+        List<List<Integer>> rowSeatList = convertToRow(seatList);
         return rowSeatList;
     }
 
